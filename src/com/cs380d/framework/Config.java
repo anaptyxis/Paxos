@@ -14,33 +14,34 @@ import java.net.InetAddress;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+
 public class Config {
 
+	
+	// config the port and local host
+	public static final int PORT = 9000;
+	public static final String LOCALHOST = "127.0.0.1";
+	
 	/**
-	 * Loads config from a file.  Optionally puts in 'procNum' if in file.
-	 * See sample file for syntax
-	 * @param filename
-	 * @throws FileNotFoundException
+	 * Instead of read from file, in paxos, it should get message locally without script
+	 * @param numServers, index
 	 * @throws IOException
 	 */
-	public Config(String filename) throws FileNotFoundException, IOException {
-		logger = Logger.getLogger("NetFramework");
+	public Config(int index, int numServers) throws IOException {
 
-		Properties prop = new Properties();
-		prop.load(new FileInputStream(filename));
-		numProcesses = loadInt(prop,"NumProcesses");
+        logger = Logger.getLogger("NetFramework");
+		numProcesses = numServers;
+        procNum = index;
 		addresses = new InetAddress[numProcesses];
 		ports = new int[numProcesses];
-		for (int i=0; i < numProcesses; i++) {
-			ports[i] = loadInt(prop, "port" + i);
-			addresses[i] = InetAddress.getByName(prop.getProperty("host" + i).trim());
-		}
-		if (prop.getProperty("ProcNum") != null) {
-			procNum = loadInt(prop,"procNum");
-		} else {
-			logger.info("procNum not loaded from file");
+
+		for (int i = 0; i < numProcesses; i++) {
+			ports[i] = PORT + i;
+			addresses[i] = InetAddress.getByName(LOCALHOST);
+			System.out.printf("%d: %d @ %s\n", i, ports[i], addresses[i]);
 		}
 	}
+	
 	
 	private int loadInt(Properties prop, String s) {
 		return Integer.parseInt(prop.getProperty(s.trim()));
