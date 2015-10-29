@@ -1,5 +1,7 @@
 package message;
 
+import value.BallotNum;
+
 
 /**
  * @author Tian Zhang

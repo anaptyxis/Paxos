@@ -5,7 +5,7 @@
  * @author: Isaac Levy
  */
 
-package ut.distcomp.framework;
+package framework;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

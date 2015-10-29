@@ -9,7 +9,7 @@
 * The sendMsg method has been modified by Navid Yaghmazadeh to fix a bug regarding to send a message to a reconnected socket.
 */
 
-package ut.distcomp.framework;
+package framework;
 
 import java.io.IOException;
 import java.net.Socket;
