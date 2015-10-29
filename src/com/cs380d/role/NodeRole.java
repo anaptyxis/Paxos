@@ -1,11 +1,9 @@
 package role;
 
-import java.io.IOException;
-
 import message.MessageFIFO;
 import message.Message;
 import application.Server;
-public class NodeRole {
+public class NodeRole extends Thread{
 	int pid;
 	Server server;
 	MessageFIFO msgQueue;
@@ -18,6 +16,8 @@ public class NodeRole {
 	    server = s;
 	    msgQueue = new MessageFIFO();
 	  }
+	  
+	  
 	  /**
 		 * server send message
 		 * @param dst, message
@@ -27,12 +27,27 @@ public class NodeRole {
 		    //server send the message
 		    server.send(msg);
 	  }
+	  
+	  /**
+		 * server broadcast message
+		 * @param  nessage
+		 */
+	  public void broadcast( Message msg) {
+	    
+	    
+	  }
+	  
+	  
 	  /**
 		 * server execute
 		 * @param none
 		 */
 	  public void execute() {
+		  
+		  
 	  }
+	  
+	  
 	  /**
 		 * server run
 		 * @param none
@@ -41,6 +56,10 @@ public class NodeRole {
 	    execute();
 	    
 	  }
+	  
+	 
+	  
+	  
 	  /**
 		 * server deliver message
 		 * @param message

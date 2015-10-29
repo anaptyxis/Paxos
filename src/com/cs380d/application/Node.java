@@ -7,11 +7,11 @@ import message.MessageFIFO;
 /**
  * @author Tian Zhang
  */
-public class Node extends Thread {
+public class Node  {
   public int pid;
   public int numServers;
   private MessageFIFO msgQueue;
-  private Paxos paxos;
+  public Paxos paxos;
 
   int[] acceptors;
   int[] replicas;

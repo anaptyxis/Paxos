@@ -26,12 +26,14 @@ public class Acceptor extends NodeRole{
 	 
 	  public void execute () {
 	 
-	      Message msg = receive();
+	      
 	     // if the system is not working 
 	      
 	      
 	      
 	     // if the system is working 
+	     while(true){
+	      Message msg = receive();
 	      if (msg instanceof Phase1aMessage) {
 	        Phase1aMessage p1a = (Phase1aMessage) msg;
 	        BallotNum b = p1a.ballotNum;
@@ -48,6 +50,7 @@ public class Acceptor extends NodeRole{
 	        }
 	        send(p2a.src, getMsg(2));
 	      }
+	    }
 	    
 	  }
 

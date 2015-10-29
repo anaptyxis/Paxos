@@ -1,7 +1,5 @@
 package application;
 
-import java.io.IOException;
-
 import message.Message;
 
 public class Paxos {
