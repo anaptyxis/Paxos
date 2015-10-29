@@ -18,29 +18,8 @@ import java.util.logging.Logger;
 public class Config {
 
 	
-	// config the port and local host
-	public static final int PORT = 9000;
 	public static final String LOCALHOST = "127.0.0.1";
 	
-	/**
-	 * Instead of read from file, in paxos, it should get message locally without script
-	 * @param numServers, index
-	 * @throws IOException
-	 */
-	public Config(int index, int numServers) throws IOException {
-
-        logger = Logger.getLogger("NetFramework");
-		numProcesses = numServers;
-        procNum = index;
-		addresses = new InetAddress[numProcesses];
-		ports = new int[numProcesses];
-
-		for (int i = 0; i < numProcesses; i++) {
-			ports[i] = PORT + i;
-			addresses[i] = InetAddress.getByName(LOCALHOST);
-			System.out.printf("%d: %d @ %s\n", i, ports[i], addresses[i]);
-		}
-	}
 	
 	
 	private int loadInt(Properties prop, String s) {

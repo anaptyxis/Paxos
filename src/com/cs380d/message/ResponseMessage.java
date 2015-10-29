@@ -24,7 +24,7 @@ public class ResponseMessage extends Message {
   }
 
   public String format () {
-    return slotNum + " " + prop.clinetID + ": " + prop.text;
+    return slotNum + " " + prop.clientID + ": " + prop.text;
   }
 
 }

@@ -17,7 +17,7 @@ public class Master {
       int clientIndex, nodeIndex;
       //System.out.println(inputLine[0]);
       if (inputLine[0].equals("start")) {
-        numNodes = Integer.parseInt(inputLine[1]);
+        numNodes = Integer.parseInt(inputLine[1]);  // the number of server
         numClients = Integer.parseInt(inputLine[2]);
               /*
                * start up the right number of nodes and clients, and store the
@@ -34,13 +34,13 @@ public class Master {
             message += " ";
           }
         }
-        
+        	/*
+        	 * Instruct the client specified by clientIndex to send the message
+        	 * to the proper paxos node
+        	 */
         paxos.clientBroadcast(clientIndex, message);
 
-              /*
-               * Instruct the client specified by clientIndex to send the message
-               * to the proper paxos node
-               */
+              
 
       } else if (inputLine[0].equals("printChatLog")) {
         clientIndex = Integer.parseInt(inputLine[1]);

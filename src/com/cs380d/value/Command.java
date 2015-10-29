@@ -8,16 +8,16 @@ import java.util.Objects;
 
 public class Command {
   // client identifier
-  public int clinetID;
+  public int clientID;
 
   // sequence number 
   public int cid;
 
-  // message 
+  // real message 
   public String text;
 
   public Command(int k, int c, String t) {
-    clinetID = k;
+    clientID = k;
     cid = c;
     text = t;
   }
@@ -31,11 +31,11 @@ public class Command {
       return true;
 
     Command rhs = (Command) obj;
-    return rhs.clinetID == clinetID  && rhs.cid == cid && rhs.text .equals(text);
+    return rhs.clientID == clientID  && rhs.cid == cid && rhs.text .equals(text);
   }
 
   @Override
   public String toString () {
-    return "Command is " + clinetID + ", " + cid + ", " + text + " ";
+    return "Command is " + clientID + ", " + cid + ", " + text + " ";
   }
 }

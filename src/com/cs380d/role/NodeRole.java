@@ -58,8 +58,6 @@ public class NodeRole extends Thread{
 	  }
 	  
 	 
-	  
-	  
 	  /**
 		 * server deliver message
 		 * @param message
@@ -67,12 +65,14 @@ public class NodeRole extends Thread{
 	  public void deliver (Message msg) {
 	    msgQueue.enqueue(msg);
 	  }
+	  
+	  
 	  /**
 		 * server receive message
 		 * @param none
 		 */
 	  public Message receive () {
-	    return msgQueue.dequeue();
+		return null;
 	  }
 
 

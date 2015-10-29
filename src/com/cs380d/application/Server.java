@@ -28,18 +28,17 @@ import value.Constant;
 public class Server extends Node {
   public static boolean debug = false;
 
-  /**
-   * Server identifier
-   */
+  
+  // Server identifier
   public int index;
-
+  // the id of current leader
   public int leaderID;
-
+  // whether the server is working
   public boolean shutdown = false;
 
  
   /**
-   * Local server process sequence number
+   * Local server process id
    * Reserved ID :
    * Replica : 0
    * Acceptor : 1
@@ -49,17 +48,20 @@ public class Server extends Node {
 
 
   /**
-   * Map from process sequence number to Role
+   * Map from process id to NodeRole
    */
   public HashMap<Integer, NodeRole> roles;
 
   Replica replica;
   Acceptor acceptor;
   Leader leader;
+   
+  /**
+ 	 * Default constructor for Server
+ 	 * @param Id, number of server, number of client, the paxos environment, whether it is recover thread
+ 	 */
 
-
-  public Server(int idx, int numSevers, int numClients, Paxos paxos,
-                boolean restart) {
+  public Server(int idx, int numSevers, int numClients, Paxos paxos,boolean restart) {
     super(paxos, idx, numSevers, numClients);
     index = idx;
     roles = new HashMap<Integer, NodeRole>();
@@ -74,26 +76,36 @@ public class Server extends Node {
       initialization();
     }
   }
-
+  
+  /**
+	 * recover the server
+	 * @param none
+	 */
   public void recover () {
    
   }
 
+  /**
+ 	 * initialize the server
+ 	 * @param none
+ 	 */
   public void initialization () {
       /* initiates acceptor */
     acceptor = new Acceptor(bind(index, Constant.ACCEPTOR), this);
 
     if (isLeader()) {
-      leader = new Leader(bind(index, Constant.LEADER), this,
-          acceptors, replicas);
+      leader = new Leader(bind(index, Constant.LEADER), this, acceptors, replicas);
     } else {
       leader = null;
     }
 
    
-  }
+ }
 
-
+  /**
+	 * start the server
+	 * @param none
+	 */
 
   public void run () {
     acceptor.start();
@@ -115,16 +127,28 @@ public class Server extends Node {
     }
   }
 
+  /**
+	 * return whether is leader
+	 * @param none
+	 */
   public boolean isLeader() {
     return leaderID == index;
   }
 
+  /**
+	 * get the lead id
+	 * @param none
+	 */
   public int getLeader () {
     return bind(leaderID, Constant.LEADER);
   }
 
+  /**
+	 * return the id of changing role
+	 * @param none
+	 */
   public synchronized int nextId() {
-    assert (id < Constant.BASE);
+    
     return bind(index, id++);
   }
 
@@ -138,6 +162,9 @@ public class Server extends Node {
     } 
   }
 
+  /**
+   *  remove the role
+   */
 
   public void remove(int pid) {
     roles.remove(pid);
@@ -179,7 +206,7 @@ public class Server extends Node {
 
   /**
    * Clean shutdown the server, including all the
-   * Replica, Acceptor, Leader, etc. associated with this server
+   * Replica, Acceptor, Leader
    */
   public void cleanShutDown () {
     shutdown = true;

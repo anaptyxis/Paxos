@@ -2,6 +2,8 @@ package application;
 
 /**
  * @author zhangtian
+ * The class for Client 
+ * extends Node
  */
 
 import value.Command;
@@ -14,17 +16,16 @@ import java.util.HashMap;
 
 
 public class Client extends Node {
-  public static final boolean GUI_on = false;
-
-
+  //sequence number for message
   int sequenceNum;
-  /* client id, negative num for pid */
+  // client id
   int cid;
   HashMap<Integer, ResponseMessage> log;
-
-
-
-
+  /**
+   * Default constructor
+   * @param none
+   * dequeue the FIFO
+   */
   public Client(int cid, int numServers, int numClients, Paxos paxos) {
     super(paxos, cid, numServers, numClients);
     this.sequenceNum = 0;
@@ -33,7 +34,13 @@ public class Client extends Node {
     log = new HashMap<Integer, ResponseMessage>();
     
   }
-
+  
+  /**
+   * Start the thread
+   * @param none
+   * just receive response message 
+   * update the log
+   */
   public void run() {
     while (true){
       Message msg = receive();
@@ -47,8 +54,12 @@ public class Client extends Node {
     }
   }
 
-  
-
+  /**
+   * Broadcast the message
+   * @param string text
+   * Configured Command with id sequenceNumber
+   * send out request to every replicas
+   */
   public void broadcast (String s) {
     Command prop = new Command(cid, sequenceNum, s);
     sequenceNum++;
@@ -58,7 +69,12 @@ public class Client extends Node {
   }
 
   
-
+  /**
+   * print the chat log
+   * @param none
+   * return the log
+   * 
+   */
   public String printChatLog () {
     StringBuilder sb = new StringBuilder();
     int slotNum = 0;
