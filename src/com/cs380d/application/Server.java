@@ -176,10 +176,7 @@ public class Server extends Node {
    */
   @Override
   public void send(Message msg) {
-    if (msg instanceof Phase1aMessage || msg instanceof Phase2aMessage) {
-     
-    }
-    paxos.send(msg);
+    
   }
 
   

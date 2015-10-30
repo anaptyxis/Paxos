@@ -84,15 +84,6 @@ public class Paxos {
 		}
 		
 		
-		/**
-		 * send message in Async system
-		 * @param id of client
-		 * the destination is in message
-		 */
 		
-		public void send(Message msg ){
-			  
-			  
-		}
 		
 }

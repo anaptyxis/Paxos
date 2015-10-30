@@ -47,7 +47,7 @@ public class Node extends Thread{
    * @param msg
    */
   public void send(Message msg) {
-    paxos.send(msg);
+    
   }
   
   /**
