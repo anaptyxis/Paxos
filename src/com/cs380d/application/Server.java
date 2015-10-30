@@ -26,8 +26,6 @@ import value.Constant;
 
 
 public class Server extends Node {
-  public static boolean debug = false;
-
   
   // Server identifier
   public int index;

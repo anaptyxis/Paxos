@@ -50,8 +50,7 @@ public class Leader extends NodeRole {
           Command p = propMsg.prop;
           proposals.put(s, p);
           if (active) {
-            new Commander(server.nextId(), server, pid, acceptors, replicas, new
-                Pvalue(ballotNum, s, p)).start();
+            new Commander(server.nextId(), server, pid, acceptors, replicas, new Pvalue(ballotNum, s, p)).start();
           }
         }
       }
@@ -59,8 +58,7 @@ public class Leader extends NodeRole {
         AdoptedMessage adptMsg = (AdoptedMessage) msg;
         update(adptMsg.accepted);
         for (int s : proposals.keySet()) {
-          new Commander(server.nextId(), server, pid, acceptors, replicas, new
-              Pvalue(ballotNum, s, proposals.get(s))).start();
+          new Commander(server.nextId(), server, pid, acceptors, replicas, new Pvalue(ballotNum, s, proposals.get(s))).start();
         }
         active = true;
       }

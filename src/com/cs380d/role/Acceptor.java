@@ -23,7 +23,7 @@ public class Acceptor extends NodeRole{
 	    s.roles.put(pid, this);
 	  }
 	  
-	 
+	  @Override
 	  public void execute () {
 	 
 	      
@@ -34,6 +34,7 @@ public class Acceptor extends NodeRole{
 	     // if the system is working 
 	     while(true){
 	      Message msg = receive();
+	      // receive phase 1 message
 	      if (msg instanceof Phase1aMessage) {
 	        Phase1aMessage p1a = (Phase1aMessage) msg;
 	        BallotNum b = p1a.ballotNum;
@@ -41,6 +42,7 @@ public class Acceptor extends NodeRole{
 	          ballotNum.set(b);
 	        }
 	        send(p1a.src, getMsg(1));
+	      // receive phase 2 message
 	      } else if (msg instanceof Phase2aMessage) {
 	        Phase2aMessage p2a = (Phase2aMessage) msg;
 	        BallotNum b = p2a.pv.ballotNum;

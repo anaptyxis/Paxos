@@ -1,5 +1,6 @@
 package role;
 
+import value.Constant;
 import message.MessageFIFO;
 import message.Message;
 import application.Server;
@@ -33,8 +34,9 @@ public class NodeRole extends Thread{
 		 * @param  nessage
 		 */
 	  public void broadcast( Message msg) {
-	    
-	    
+		  for (int i = 1; i <= server.numServers; i++) {
+		      send(i * Constant.INTERLEAVE, msg);
+		    }
 	  }
 	  
 	  
