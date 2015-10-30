@@ -1,11 +1,22 @@
 package application;
 
 import java.util.List;
+import java.awt.print.Printable;
 import java.io.IOException;
 
+import org.omg.PortableServer.POAPackage.WrongAdapter;
+
 import message.AdoptedMessage;
+import message.DecisionMessage;
 import message.Message;
 import message.MessageFIFO;
+import message.Phase1aMessage;
+import message.Phase1bMessage;
+import message.Phase2aMessage;
+import message.Phase2bMessage;
+import message.PreemptedMessage;
+import message.ProposeMessage;
+import message.RequestMessage;
 import message.ResponseMessage;
 import value.Constant;
 import framework.Config;
@@ -103,8 +114,11 @@ public class Node extends Thread{
    */
   public Message receive () {
 	List<String> rev = this.nc.getReceivedMsgs();
-	return null;
-    
+	for(String tmp : rev){
+		Message msg = Str2Msg(tmp);
+		msgQueue.enqueue(msg);
+	}
+    return msgQueue.dequeue();
   }
   
   /**
@@ -124,12 +138,47 @@ public class Node extends Thread{
   private Message Str2Msg(String msg){
 	  String[] split_input = msg.split(Constant.DELIMITER);
 	  if(split_input[0].contains("Adopted")){
-		  
+		   AdoptedMessage result = new AdoptedMessage(msg);
+		   return result;
+	  }else if(split_input[0].contains("Decision")){
+		   DecisionMessage result = new DecisionMessage(msg);
+		   return result;
 	  }else if(split_input[0].contains("1a")){
-		  
-	  }else if(split_input[0].contains("1b")){
-		  
+		  Phase1aMessage result = new Phase1aMessage(msg);
+		   return result;
 	  }
-	  return null;
+	  else if(split_input[0].contains("1b")){
+		  Phase1bMessage result = new Phase1bMessage(msg);
+		   return result;
+	  }
+	  else if(split_input[0].contains("2a")){
+		  Phase2aMessage result = new Phase2aMessage(msg);
+		   return result;
+	  }
+	  else if(split_input[0].contains("2b")){
+		  Phase2bMessage result = new Phase2bMessage(msg);
+		   return result;
+	  }
+	  else if(split_input[0].contains("Preempt")){
+		  PreemptedMessage result = new PreemptedMessage(msg);
+		   return result;
+	  }
+	  else if(split_input[0].contains("Propose")){
+		  ProposeMessage result = new ProposeMessage(msg);
+		   return result;
+	  }
+	  else if(split_input[0].contains("Request")){
+		  RequestMessage result = new RequestMessage(msg);
+		   return result;
+	  }
+	  else if(split_input[0].contains("Response")){
+		  ResponseMessage result = new ResponseMessage(msg);
+		   return result;
+	  }else{
+		  System.out.println("receive wrong message");
+		  return null;
+	  }
+	
+	  
   }
 }
