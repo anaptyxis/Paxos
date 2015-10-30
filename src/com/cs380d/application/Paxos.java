@@ -47,8 +47,7 @@ public class Paxos {
 		 */
 		
 		public String printLog(int clientID){
-			  
-			  return null;
+			return clientList[clientID].printChatLog();
 		}
 		
 		
@@ -58,8 +57,8 @@ public class Paxos {
 		 */
 		
 		public void crashServer(int serverID){
-			  
-			  
+			 
+			  serverList[serverID].cleanShutDown();
 		}
 		
 		
@@ -69,7 +68,8 @@ public class Paxos {
 		 */
 		
 		public void reviveServer(int serverID){
-			  
+			 
+			serverList[serverID].recover();
 			  
 		}
 		
@@ -79,7 +79,7 @@ public class Paxos {
 		 */
 		
 		public void clientBroadcast(int client, String Msg ){
-			  
+			  clientList[client].broadcast(Msg);
 			  
 		}
 		

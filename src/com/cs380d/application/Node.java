@@ -1,8 +1,15 @@
 package application;
 
-import value.Constant;
+import java.util.List;
+import java.io.IOException;
+
+import message.AdoptedMessage;
 import message.Message;
 import message.MessageFIFO;
+import message.ResponseMessage;
+import value.Constant;
+import framework.Config;
+import framework.NetController;
 
 /**
  * @author Tian Zhang
@@ -12,7 +19,8 @@ public class Node extends Thread{
   public int numServers;
   private MessageFIFO msgQueue;
   public Paxos paxos;
-
+  private NetController nc;
+  private Config config;
   int[] acceptors;
   int[] replicas;
   public int[] clients;
@@ -39,6 +47,15 @@ public class Node extends Thread{
     for (int i = 0; i < numClients; i++) {
       clients[i]  = i;
     }
+    
+    try {
+		config = new Config(id,numServers+numClients);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
+    nc = new NetController(config);
 
   }
 
@@ -47,6 +64,17 @@ public class Node extends Thread{
    * @param msg
    */
   public void send(Message msg) {
+	 if (msg instanceof ResponseMessage) {
+	      /* only message to client */
+	      int clientId = Math.abs(msg.dst);
+	      this.nc.sendMsg(clientId, msg.toString());
+	      
+	     // System.out.println("Delivered to client: " + clientId);
+	    } else {
+	      int serverId = msg.dst / Constant.INTERLEAVE;
+	      this.nc.sendMsg(serverId, msg.toString());
+	     
+	    }
     
   }
   
@@ -74,6 +102,7 @@ public class Node extends Thread{
    * dequeue the FIFO
    */
   public Message receive () {
+	List<String> rev = this.nc.getReceivedMsgs();
 	return null;
     
   }
@@ -85,5 +114,22 @@ public class Node extends Thread{
    */
   public int bind(int sid, int rid) {
     return sid * Constant.INTERLEAVE + rid;
+  }
+  
+  /**
+   * convert string to message
+   * @param message string
+   */
+  
+  private Message Str2Msg(String msg){
+	  String[] split_input = msg.split(Constant.DELIMITER);
+	  if(split_input[0].contains("Adopted")){
+		  
+	  }else if(split_input[0].contains("1a")){
+		  
+	  }else if(split_input[0].contains("1b")){
+		  
+	  }
+	  return null;
   }
 }

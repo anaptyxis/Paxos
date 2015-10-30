@@ -74,7 +74,7 @@ public class NodeRole extends Thread{
 		 * @param none
 		 */
 	  public Message receive () {
-		return null;
+		return msgQueue.dequeue();
 	  }
 
 
