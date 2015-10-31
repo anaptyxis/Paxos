@@ -31,7 +31,7 @@ public class Replica extends NodeRole {
   }
 
   /**
-   *  Helper method to get the max unused slot number
+   *  get the max unused slot number
    */
   public int getMaxSlotNum() {
     int s = 0;
@@ -40,12 +40,18 @@ public class Replica extends NodeRole {
     }
     return s;
   }
-
+  
+  /*
+   * propose the command with lowest unused slot
+   */
   public void propose(Command p) {
+	// check whether this is already a decision message 
     if (!decisions.containsValue(p)) {
       int s = getMaxSlotNum();
       proposals.put(s, p);
       send(server.getLeader(), new ProposeMessage(pid, s, p));
+    }else{
+    	System.out.println("ERROR : propose a command which is in decision list");
     }
   }
 
@@ -62,7 +68,7 @@ public class Replica extends NodeRole {
         return;
       }
     }
-    //send(p.kappa, new ResponseMsg());
+    //send the message to client
     for (int cid : server.clients) {
       send(cid, new ResponseMessage(pid, slotNum, p));
     }
@@ -73,11 +79,13 @@ public class Replica extends NodeRole {
 	// server is working
     while (true) {
       Message msg = receive();
-     
+      // receive a request from client
+      // propose with lowest unused slot
       if (msg instanceof RequestMessage) {
         RequestMessage rqstMsg = (RequestMessage) msg;
         propose(rqstMsg.prop);
       }
+      // receive a decision message
       if (msg instanceof DecisionMessage) {
         DecisionMessage dsnMsg = (DecisionMessage) msg;
         decisions.put(dsnMsg.slotNum, dsnMsg.prop);
