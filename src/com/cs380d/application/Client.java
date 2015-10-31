@@ -27,7 +27,7 @@ public class Client extends Node {
    * dequeue the FIFO
    */
   public Client(int cid, int numServers, int numClients, Paxos paxos) {
-    super(paxos, cid, numServers, numClients);
+    super(paxos, cid, numServers, numClients,true);
     this.sequenceNum = 0;
     this.cid = cid;
 

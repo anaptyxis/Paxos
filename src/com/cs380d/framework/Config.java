@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 public class Config {
 
-	public static final int PORT = 10000;
+	public static final int PORT = 9000;
 	public static final String LOCALHOST = "127.0.0.1";
 	
 

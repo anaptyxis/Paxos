@@ -51,17 +51,18 @@ public class Replica extends NodeRole {
       proposals.put(s, p);
       send(server.getLeader(), new ProposeMessage(pid, s, p));
     }else{
-    	System.out.println("ERROR : propose a command which is in decision list");
+    	//System.out.println("Note : propose has already been decided");
     }
   }
 
   /*
-   * determine the lowest unused slot number s'
-   * and adds <s', p> to its set of proposals
+   * after receive the decision
+   * send response to client
    */
 
   public void perform(Command p) {
     // if it has already performed the command
+	// only send out new command
     for (int s = 0; s < slotNum; s++) {
       if (decisions.get(s).equals(p)) {
          slotNum++;
@@ -90,10 +91,12 @@ public class Replica extends NodeRole {
         DecisionMessage dsnMsg = (DecisionMessage) msg;
         decisions.put(dsnMsg.slotNum, dsnMsg.prop);
         while (decisions.containsKey(slotNum)) {
-          if (proposals.containsKey(slotNum) &&
-              !decisions.get(slotNum).equals(proposals.get(slotNum))) {
+          // if decision and proposal is not match, propose it again
+          if (proposals.containsKey(slotNum) && !decisions.get(slotNum).equals(proposals.get(slotNum))) {
             propose(proposals.get(slotNum));
           }
+          // perform the decision
+          // send to client
           perform(decisions.get(slotNum));
         }
       }

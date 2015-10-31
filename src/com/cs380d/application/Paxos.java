@@ -1,5 +1,7 @@
 package application;
 
+import framework.Config;
+import framework.NetController;
 import message.Message;
 /**
  * The class for paxos environment
@@ -8,7 +10,8 @@ import message.Message;
 public class Paxos {
 		public Server[] serverList;
 		public Client[] clientList;
-		
+		public Config config;
+		public NetController ncController;
 		
 		/**
 		 * Default Constructor

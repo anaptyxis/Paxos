@@ -1,10 +1,7 @@
 package application;
 
 import java.util.List;
-import java.awt.print.Printable;
 import java.io.IOException;
-
-import org.omg.PortableServer.POAPackage.WrongAdapter;
 
 import message.AdoptedMessage;
 import message.DecisionMessage;
@@ -41,7 +38,7 @@ public class Node extends Thread{
 	 * Default Constructor
 	 * @param paxos, id, number of server, number of client
 	 */
-  public Node(Paxos p, int id, int numServers, int numClients) {
+  public Node(Paxos p, int id, int numServers, int numClients, boolean isClient) {
     paxos = p;
     pid = id;
     this.numServers = numServers;
@@ -62,7 +59,10 @@ public class Node extends Thread{
     }
     
     try {
-		config = new Config(id,numServers+numClients);
+    	if(isClient)
+    		config = new Config(id,numServers+numClients);
+    	else
+    		config = new Config(id-1+numClients,numServers+numClients);
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

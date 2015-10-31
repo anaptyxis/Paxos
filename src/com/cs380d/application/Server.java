@@ -60,7 +60,7 @@ public class Server extends Node {
  	 */
 
   public Server(int idx, int numSevers, int numClients, Paxos paxos,boolean restart) {
-    super(paxos, idx, numSevers, numClients);
+    super(paxos, idx, numSevers, numClients,false);
     index = idx;
     roles = new HashMap<Integer, NodeRole>();
 
