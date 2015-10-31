@@ -28,6 +28,7 @@ import framework.NetController;
 public class Node extends Thread{
   public int pid;
   public int numServers;
+  public int numClients;
   private MessageFIFO msgQueue;
   public Paxos paxos;
   private NetController nc;
@@ -44,6 +45,7 @@ public class Node extends Thread{
     paxos = p;
     pid = id;
     this.numServers = numServers;
+    this.numClients = numClients;
     msgQueue = new MessageFIFO();
 
     acceptors = new int[numServers];
@@ -73,6 +75,9 @@ public class Node extends Thread{
   /**
    * Send message to paxos
    * @param msg
+   * port 0 - numServer + numClient-1 
+   * client 0 - numClient-1
+   * server numClient - numServer + numClient - 1
    */
   public void send(Message msg) {
 	 if (msg instanceof ResponseMessage) {
@@ -83,7 +88,7 @@ public class Node extends Thread{
 	     // System.out.println("Delivered to client: " + clientId);
 	    } else {
 	      int serverId = msg.dst / Constant.INTERLEAVE;
-	      this.nc.sendMsg(serverId, msg.toString());
+	      this.nc.sendMsg(serverId -1 + numClients, msg.toString());
 	     
 	    }
     
