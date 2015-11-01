@@ -1,2 +1,0 @@
-javac -d bin src/com/cs380d/application/*.java src/com/cs380d/value/*.java src/com/cs380d/message/*.java src/com/cs380d/framework/*.java src/com/cs380d/role/*.java
-cat tests/$1.test | $(cat COMMAND) > temp_output && diff -q temp_output solutions/$1.sol
