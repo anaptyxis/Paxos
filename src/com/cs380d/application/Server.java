@@ -2,7 +2,11 @@ package application;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
+
 import message.Message;
+import message.Phase1aMessage;
+import message.Phase2aMessage;
 import role.Acceptor;
 import role.Leader;
 import role.NodeRole;
@@ -35,6 +39,11 @@ public class Server extends Node {
    */
   public int id = 3;
 
+  /**
+   * For time bomb leader
+   */
+  ReentrantLock lock ;
+  public int messageCount = -1;
 
   /**
    * Map from process id to NodeRole
@@ -54,7 +63,7 @@ public class Server extends Node {
     super(paxos, idx, numSevers, numClients,false);
     index = idx;
     roles = new HashMap<Integer, NodeRole>();
-
+    lock = new ReentrantLock();
     if (!restart) {
       leaderID = 1;
       /* initiates replica */
@@ -188,6 +197,54 @@ public class Server extends Node {
     shutdown = true;
   }
 
+
+  /**
+   * time bomber message
+   * @param number of messages
+   */
+  public void timeBombLeader (int msgCount) {
+	  lock.lock();
+	    if (isLeader()) {
+	      if (msgCount == 0) {
+	        cleanShutDown();
+	      } else {
+	        messageCount = msgCount;
+	      }
+	    }
+	    
+	 
+  	 lock.unlock();
+  }
+  
+  /**
+   * Send message 
+   * to support time bomb leader function from paxos
+   * @param msg
+   */
+   @Override
+   public void send(Message msg) {
+	   // count the number which is sent by leader
+	   // count down only for phase 1a message and phase 2a message
+	   if (msg instanceof Phase1aMessage || msg instanceof Phase2aMessage) {
+		   lock.lock();
+		   // should shut down now
+		   if (messageCount == 0) {
+			   if(Constant.DEBUG)
+				   System.out.println("Shutdown Now!");
+			   cleanShutDown();
+			   return;
+		   }
+		   // count down message
+		   else if (messageCount > 0) {
+			   messageCount--;
+			   if(Constant.DEBUG)
+				   System.out.println("Shutdown timer: " + messageCount);
+		   }
+		   lock.unlock();
+	   }
+   // Normal send function 
+   paxos.send(msg);
+ }
 
   
 }

@@ -83,7 +83,7 @@ public class Master {
                * related messages specified by numMessages
                */
         for (int i = 0; i < numNodes; i++) {
-             //paxos.serverList[i].timeBombLeader(numMessages);
+             paxos.serverList[i].timeBombLeader(numMessages);
         }
       }
     }
