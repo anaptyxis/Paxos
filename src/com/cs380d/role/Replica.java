@@ -76,6 +76,7 @@ public class Replica extends NodeRole {
     slotNum++;
   }
 
+  @Override
   public void execute () {
 	// server is working
     while (true) {

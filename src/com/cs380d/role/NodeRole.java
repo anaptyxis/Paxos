@@ -26,6 +26,9 @@ public class NodeRole extends Thread{
 	  public void send (int dst, Message msg) {
 		    msg.dst = dst;
 		    //server send the message
+		    if (Constant.DEBUG){
+		    	System.out.println("I am sendint to" + Integer.toString(dst)+ " " + msg);
+		    }
 		    server.send(msg);
 	  }
 	  
@@ -56,6 +59,7 @@ public class NodeRole extends Thread{
 		 */
 	  public void run() {
 	    execute();
+	    server.remove(pid);
 	    
 	  }
 	  

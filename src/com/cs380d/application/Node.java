@@ -80,8 +80,9 @@ public class Node extends Thread{
    * server numClient - numServer + numClient - 1
    */
   public void send(Message msg) {
+	 /*
 	 if (msg instanceof ResponseMessage) {
-	      /* only message to client */
+	      //only message to client 
 	      int clientId = Math.abs(msg.dst);
 	      this.nc.sendMsg(clientId, msg.toString());
 	      
@@ -91,7 +92,8 @@ public class Node extends Thread{
 	      this.nc.sendMsg(serverId -1 + numClients, msg.toString());
 	     
 	    }
-    
+     */
+	 paxos.send(msg);
   }
   
   /**
@@ -118,11 +120,13 @@ public class Node extends Thread{
    * dequeue the FIFO
    */
   public Message receive () {
+	/*
 	List<String> rev = this.nc.getReceivedMsgs();
 	for(String tmp : rev){
 		Message msg = Str2Msg(tmp);
 		msgQueue.enqueue(msg);
 	}
+	*/
     return msgQueue.dequeue();
   }
   

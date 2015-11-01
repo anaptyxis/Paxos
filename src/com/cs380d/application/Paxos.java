@@ -1,8 +1,10 @@
 package application;
 
+import value.Constant;
 import framework.Config;
 import framework.NetController;
 import message.Message;
+import message.ResponseMessage;
 /**
  * The class for paxos environment
  * @author Tian Zhang
@@ -85,6 +87,23 @@ public class Paxos {
 			  clientList[client].broadcast(Msg);
 			  
 		}
+		
+		
+		public void send(Message msg) {
+		   
+		    if (msg instanceof ResponseMessage) {
+		      /* only message to client */
+		      int clientId = Math.abs(msg.dst);
+		      assert clientId < clientList.length;
+		      clientList[clientId].deliver(msg);
+		      System.out.println("Delivered to client: " + clientId);
+		    } else {
+		      int serverId = msg.dst / Constant.INTERLEAVE;
+		      System.out.println("*********>>>>" + serverId + "\t" + msg.dst+msg);
+		      assert serverId <= serverList.length;
+		      serverList[serverId - 1].deliver(msg);
+		    }
+		  }
 		
 		
 		

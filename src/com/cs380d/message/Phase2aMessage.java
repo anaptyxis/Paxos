@@ -1,7 +1,5 @@
 package message;
 
-import com.sun.corba.se.impl.resolver.SplitLocalResolverImpl;
-
 import value.Constant;
 import value.Pvalue;
 

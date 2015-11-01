@@ -36,8 +36,12 @@ public abstract class Message {
 		  result+=tmp.toString();
 		  result+=Constant.PVALUESETDELIMITER;
 	  }
-	  int length = result.length();
-	  return result.substring(0,length-1);
+	  if(result !=null){
+		  int length = result.length();
+		  return result.substring(0,length-1);
+	  }else{
+		  return null;
+	  }
   }
   
 

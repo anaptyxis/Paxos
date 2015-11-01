@@ -37,7 +37,6 @@ public class Config {
 			for (int i = 0; i < numProcesses; i++) {
 				ports[i] = PORT + i;
 				addresses[i] = InetAddress.getByName(LOCALHOST);
-				System.out.printf("%d: %d @ %s\n", i, ports[i], addresses[i]);
 			}
 	}
 		

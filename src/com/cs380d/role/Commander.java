@@ -38,7 +38,8 @@ public class Commander extends NodeRole {
     ctrl.roles.put(pid, this);
   }
 
-  public void execcute() {
+  @Override
+  public void execute() {
     for (int acpt : acceptors) {
       waitingList.add(acpt);
       send(acpt, new Phase2aMessage(pid, pv));

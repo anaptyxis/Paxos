@@ -36,6 +36,7 @@ public class Leader extends NodeRole {
     server.roles.put(pid, this);
   }
 
+  @Override
   public void execute () {
    
     new Scout(server.nextId(), server, pid, acceptors, ballotNum).start();

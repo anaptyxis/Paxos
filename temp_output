@@ -1,25 +1,30 @@
-0: 9000 @ /127.0.0.1
-1: 9001 @ /127.0.0.1
-2: 9002 @ /127.0.0.1
-3: 9003 @ /127.0.0.1
-4: 9004 @ /127.0.0.1
-0: 9000 @ /127.0.0.1
-1: 9001 @ /127.0.0.1
-2: 9002 @ /127.0.0.1
-3: 9003 @ /127.0.0.1
-4: 9004 @ /127.0.0.1
-0: 9000 @ /127.0.0.1
-1: 9001 @ /127.0.0.1
-2: 9002 @ /127.0.0.1
-3: 9003 @ /127.0.0.1
-4: 9004 @ /127.0.0.1
-0: 9000 @ /127.0.0.1
-1: 9001 @ /127.0.0.1
-2: 9002 @ /127.0.0.1
-3: 9003 @ /127.0.0.1
-4: 9004 @ /127.0.0.1
-0: 9000 @ /127.0.0.1
-1: 9001 @ /127.0.0.1
-2: 9002 @ /127.0.0.1
-3: 9003 @ /127.0.0.1
-4: 9004 @ /127.0.0.1
+*********>>>>1	10000Request Message;0;Command*0*0*helloWorld
+*********>>>>2	20000Request Message;0;Command*0*0*helloWorld
+*********>>>>3	30000Request Message;0;Command*0*0*helloWorld
+*********>>>>1	10002Propose Message ;10000;0;Command*0*0*helloWorld
+*********>>>>1	10002Propose Message ;20000;0;Command*0*0*helloWorld
+*********>>>>1	10002Propose Message ;30000;0;Command*0*0*helloWorld
+*********>>>>1	10001Phase 1a message;10003;Ballot%0%10002
+*********>>>>2	20001Phase 1a message;10003;Ballot%0%10002
+*********>>>>3	30001Phase 1a message;10003;Ballot%0%10002
+*********>>>>1	10003Phase 1b Message;10001;Ballot%0%10002;null
+*********>>>>1	10003Phase 1b Message;30001;Ballot%0%10002;null
+*********>>>>1	10003Phase 1b Message;20001;Ballot%0%10002;null
+*********>>>>1	10002Adopted Message;10003;Ballot%0%10002;null
+*********>>>>1	10001Phase 2a Message;10004;pvalue&Ballot%0%10002&0&Command*0*0*helloWorld
+*********>>>>2	20001Phase 2a Message;10004;pvalue&Ballot%0%10002&0&Command*0*0*helloWorld
+*********>>>>3	30001Phase 2a Message;10004;pvalue&Ballot%0%10002&0&Command*0*0*helloWorld
+*********>>>>1	10004Phase 2b message;20001;Ballot%0%10002
+*********>>>>1	10004Phase 2b message;30001;Ballot%0%10002
+*********>>>>1	10004Phase 2b message;10001;Ballot%0%10002
+*********>>>>1	10000Decision message ;10004;0;Command*0*0*helloWorld
+*********>>>>2	20000Decision message ;10004;0;Command*0*0*helloWorld
+*********>>>>3	30000Decision message ;10004;0;Command*0*0*helloWorld
+Delivered to client: 0
+Delivered to client: 1
+Delivered to client: 0
+Delivered to client: 1
+Delivered to client: 0
+Delivered to client: 1
+0 0: helloWorld
+0 0: helloWorld

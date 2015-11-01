@@ -2,8 +2,6 @@ package role;
 
 
 import java.util.HashSet;
-import java.util.Set;
-
 import application.Server;
 
 import message.AdoptedMessage;
@@ -13,6 +11,7 @@ import message.Phase1bMessage;
 import message.PreemptedMessage;
 
 import value.BallotNum;
+import value.Constant;
 import value.Pvalue;
 
 /**
@@ -39,6 +38,8 @@ public class Scout extends NodeRole {
   public void execute () {
     for (int acpt : acceptors) {
       waitfor.add(acpt);
+      if(Constant.DEBUG)
+    	  System.out.println("I am scout, send to " + Integer.toString(acpt));
       send(acpt, new Phase1aMessage(pid, b));
     }
     // the server is working

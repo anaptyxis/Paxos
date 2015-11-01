@@ -2,16 +2,7 @@ package application;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.locks.ReentrantLock;
-
-import javax.management.relation.Role;
-
 import message.Message;
-import message.Phase1aMessage;
-import message.Phase2aMessage;
-
 import role.Acceptor;
 import role.Leader;
 import role.NodeRole;
@@ -168,16 +159,6 @@ public class Server extends Node {
     roles.remove(pid);
   }
 
-
-  /**
-   *
-   * Send message to Network paxos
-   * @param msg
-   */
-  @Override
-  public void send(Message msg) {
-    
-  }
 
   
 

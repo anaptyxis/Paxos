@@ -1,7 +1,5 @@
 package message;
 
-import com.sun.corba.se.spi.orb.StringPair;
-
 import value.BallotNum;
 import value.Constant;
 
