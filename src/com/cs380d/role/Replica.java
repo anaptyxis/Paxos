@@ -8,6 +8,7 @@ import message.Message;
 import message.ProposeMessage;
 import message.RequestMessage;
 import message.ResponseMessage;
+import message.RecoveryRequestMessage;
 
 import application.Server;
 
@@ -106,6 +107,12 @@ public class Replica extends NodeRole {
           // send to client
           perform(decisions.get(slotNum));
         }
+      }
+      
+      // receive a recovery request message from recovering replica
+      if (msg instanceof RecoveryRequestMessage) {
+    	  
+    	  
       }
      
     }
