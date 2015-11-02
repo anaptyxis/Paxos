@@ -21,8 +21,8 @@ public class Constant {
 	    // Heart beat message 
 	    
 	    public static final int HEARTBEATMESSAGEGAP = 100;
-	    public static final int TIMEOUTFORHEARTBEAT = 200;
+	    public static final int TIMEOUTFORHEARTBEAT = 500;
 	    //Debug
-	    public static final boolean DEBUG= true;
+	    public static final boolean DEBUG= false;
 
 }

@@ -2,6 +2,8 @@ package application;
 
 import java.util.Scanner;
 
+import value.Constant;
+
 /**
  * @author Tian Zhang
  */
@@ -56,7 +58,7 @@ public class Master {
                * of them
                */
         try {
-          Thread.sleep(1000);
+          Thread.sleep(Constant.TIMEOUTFORHEARTBEAT);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }

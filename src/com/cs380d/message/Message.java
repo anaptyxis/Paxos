@@ -15,15 +15,6 @@ public abstract class Message {
   public int dst = -1;
 
 
-  /**
-   * print the message
-   * @param 
-   */
-  public String print () {
-    String rst = "\n" + src + " -> " + dst + "\t" + "\n";
-    return rst;
-  }
-  
 
   /**
    * convert pvalue set to string

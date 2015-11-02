@@ -1,12 +1,9 @@
 package application;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.media.j3d.AmbientLight;
 
 import message.HeartBeatMessage;
 import message.Message;
@@ -67,7 +64,7 @@ public class Server extends Node {
   
   /*active client list , and server only send to active client*/
   
-  private HashSet<Integer> activeClient;
+  private HashSet<Integer> activeClientList;
   
   /**
  	 * Default constructor for Server
@@ -126,7 +123,7 @@ public class Server extends Node {
     } else {
       leader = null;
     }
-    activeClient = new HashSet<Integer>();
+    activeClientList = new HashSet<Integer>();
     hbmHandler = new HeartBeatMessageHandler(this);
    
  }
@@ -170,7 +167,11 @@ public class Server extends Node {
        } else if (msg != null) {
     	  // update the active list of client
     	  if (msg instanceof RequestMessage){
-    		  activeClient.add(msg.src);
+    		  int source = Math.abs(msg.src);
+    		  if(Constant.DEBUG){
+    			  System.out.println("I am server " + index + "  receive from client "+ source);
+    		  }
+    		  activeClientList.add(source);
     	  }
           relay(msg);
        }
@@ -213,7 +214,8 @@ public class Server extends Node {
     	  System.out.println("I am server "+pid+" relay message to "+ msg.dst+ " "+msg.toString());
       
       }
-      roles.get(msg.dst).deliver(msg);
+      if(msg.dst!=-1)
+    	  roles.get(msg.dst).deliver(msg);
     } 
   }
 
@@ -305,13 +307,14 @@ public class Server extends Node {
    if (msg instanceof ResponseMessage) {
 	      //only message to client 
 	      int clientId = Math.abs(msg.dst);
+	     
 	      // only send to active client
-	      if(activeClient.contains(clientId)){
+	      // if(activeClientList.contains(clientId)){
 	    	  nc.sendMsg(clientId+numServers, msg.toString());
 	    	  if(Constant.DEBUG){
 	    		  System.out.println("Delivered to client: " + clientId);
 	    	  }
-	      }
+	      //}
 	    } else {
 	      int serverId = msg.dst / Constant.INTERLEAVE;
 	      if(serverId != pid){

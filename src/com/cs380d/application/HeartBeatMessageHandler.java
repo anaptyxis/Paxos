@@ -33,7 +33,7 @@ public class HeartBeatMessageHandler extends Thread {
 
 	    @Override
 	    public void run(){
-	      setTimeout(Constant.TIMEOUTFORHEARTBEAT);
+	      setTimeout(Constant.TIMEOUTFORHEARTBEAT*2);
 	    }
 
 	    /*
