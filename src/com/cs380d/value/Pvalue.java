@@ -34,7 +34,16 @@ public class Pvalue implements Comparable<Pvalue> {
    * @param message string
    */
   public Pvalue(String message){
+	  if(Constant.DEBUG){
+		  System.out.println("Config the pvalue is " + message);
+	  }
 	  String[] splitStrings = message.split(Constant.PVALUEDELIMITER);
+	  if(Constant.DEBUG){
+		  for(int i = 0 ; i < splitStrings.length;i++){
+			  System.out.println("Config the pvalue is split value " + splitStrings[i]);
+		  }
+		  
+	  }
 	  ballotNum = new BallotNum(splitStrings[1]);
 	  slotNum = Integer.parseInt(splitStrings[2]);
 	  prop = new Command(splitStrings[3]);

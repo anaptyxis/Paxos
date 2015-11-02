@@ -26,8 +26,9 @@ public class ResponseMessage extends Message {
   public ResponseMessage (String message){
 	 String[] split = message.split(Constant.DELIMITER);
 	 src = Integer.parseInt(split[1]);
-	 slotNum = Integer.parseInt(split[2]);
-	 prop = new Command(split[3]);
+	 dst = Integer.parseInt(split[2]);
+	 slotNum = Integer.parseInt(split[3]);
+	 prop = new Command(split[4]);
   }
   
   
@@ -37,7 +38,7 @@ public class ResponseMessage extends Message {
    */
   @Override
   public String toString() {
-    return "Response Message " + Constant.DELIMITER+ src + Constant.DELIMITER + slotNum + Constant.DELIMITER + prop.toString();
+    return "Response Message " + Constant.DELIMITER+ src + Constant.DELIMITER + dst +Constant.DELIMITER + slotNum + Constant.DELIMITER + prop.toString();
   }
   
   

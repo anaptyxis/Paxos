@@ -25,7 +25,8 @@ public class PreemptedMessage extends Message {
   public PreemptedMessage(String message) {
 	 String[] split  = message.split(Constant.DELIMITER);
 	 src = Integer.parseInt(split[1]);
-	 ballotNum = new BallotNum(split[2]);
+	 dst = Integer.parseInt(split[2]);
+	 ballotNum = new BallotNum(split[3]);
   }
   
   
@@ -34,6 +35,6 @@ public class PreemptedMessage extends Message {
    */
   @Override
   public String toString() {
-    return "Preempted Message"+ Constant.DELIMITER + src +Constant.DELIMITER + ballotNum.toString();
+    return "Preempted Message"+ Constant.DELIMITER + src +Constant.DELIMITER + dst + Constant.DELIMITER+ ballotNum.toString();
   }
 }

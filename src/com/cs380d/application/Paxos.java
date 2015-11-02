@@ -1,5 +1,11 @@
 package application;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.lang.ProcessBuilder.Redirect;
+import java.util.ArrayList;
+
 import value.Constant;
 import framework.Config;
 import framework.NetController;
@@ -14,7 +20,6 @@ public class Paxos {
 		public Client[] clientList;
 		public Config config;
 		public NetController ncController;
-		
 		/**
 		 * Default Constructor
 		 * 
@@ -29,7 +34,6 @@ public class Paxos {
 		 * @param numServers, number od client
 		 */
 		public Paxos(int numServers, int numClients) {
-			// TODO Auto-generated constructor stub
 			serverList = new Server[numServers];
 		    for (int i = 1; i <= numServers; i++) {
 		      serverList[i - 1] = new Server(i, numServers, numClients, this, false);
@@ -40,10 +44,13 @@ public class Paxos {
 		      clientList[i] = new Client(i, numServers, numClients, this);
 		      clientList[i].start();
 		    }
-
+		    //
 		    for (int i = numServers - 1; i >= 0; i--) {
 		      serverList[i].start();
 		    }
+		   
+		    
+					
 		}
 		
 		/**
@@ -88,11 +95,11 @@ public class Paxos {
 			  
 		}
 		
-		
+		/*
 		public void send(Message msg) {
 		   
 		    if (msg instanceof ResponseMessage) {
-		      /* only message to client */
+		      /only message to client 
 		      int clientId = Math.abs(msg.dst);
 		      assert clientId < clientList.length;
 		      clientList[clientId].deliver(msg);
@@ -104,8 +111,15 @@ public class Paxos {
 		      serverList[serverId - 1].deliver(msg);
 		    }
 		  }
+		*/
 		
+		/*
+		 * Kill all running process 
+		 */
 		
+		public void killAll() {
+		
+		}
 		
 		
 }

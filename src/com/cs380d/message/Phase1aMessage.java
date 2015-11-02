@@ -24,7 +24,8 @@ public class Phase1aMessage extends Message {
   public Phase1aMessage (String message) {
 	  String[] split = message.split(Constant.DELIMITER);
 	  src  = Integer.parseInt(split[1]);
-	  ballotNum  = new BallotNum(split[2]);
+	  dst = Integer.parseInt(split[2]);
+	  ballotNum  = new BallotNum(split[3]);
   }
   
   /**
@@ -32,6 +33,6 @@ public class Phase1aMessage extends Message {
    */
   @Override
   public String toString() {
-    return "Phase 1a message"+Constant.DELIMITER + src + Constant.DELIMITER + ballotNum.toString();
+    return "Phase 1a message"+Constant.DELIMITER + src + Constant.DELIMITER  + dst+ Constant.DELIMITER + ballotNum.toString();
   }
 }

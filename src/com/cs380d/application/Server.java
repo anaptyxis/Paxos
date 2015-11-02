@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import message.Message;
 import message.Phase1aMessage;
 import message.Phase2aMessage;
+import message.ResponseMessage;
 import role.Acceptor;
 import role.Leader;
 import role.NodeRole;
@@ -116,9 +117,13 @@ public class Server extends Node {
 
     while (!shutdown) {
       Message msg = receive();
+      if(Constant.DEBUG && msg!=null){
+    	  System.out.println("I am server "+ pid +"  receive message " + msg.toString());
+  	  }
+      /*
       if (shutdown) {
         return;
-      }
+      }*/
       if (msg != null) {
         relay(msg);
       }
@@ -154,9 +159,14 @@ public class Server extends Node {
    *  Relay message to local process
    */
   public void relay(Message msg) {
+	  
     if (roles.containsKey(msg.dst)) {
+      
+      if(Constant.DEBUG){
+    	  System.out.println("I am server "+pid+" relay message to "+ msg.dst+ " "+msg.toString());
+      
+      }
       roles.get(msg.dst).deliver(msg);
-      //System.out.println(msg.print());
     } 
   }
 
@@ -243,7 +253,29 @@ public class Server extends Node {
 		   lock.unlock();
 	   }
    // Normal send function 
-   paxos.send(msg);
+   // paxos.send(msg);
+   
+   if (msg instanceof ResponseMessage) {
+	      //only message to client 
+	      int clientId = Math.abs(msg.dst);
+	      nc.sendMsg(clientId+numServers, msg.toString());
+	      if(Constant.DEBUG){
+	        System.out.println("Delivered to client: " + clientId);
+	      }
+	    } else {
+	      int serverId = msg.dst / Constant.INTERLEAVE;
+	      if(serverId != pid){
+	    	  if(Constant.DEBUG){
+		    	  System.out.println("Deliver to server " + serverId + "()()()()()() " + msg.toString());
+		      }
+	    	  nc.sendMsg(serverId -1 , msg.toString());
+	      }else{
+	    	  deliver(msg);
+	      }
+	      
+	    
+	     
+	    }
  }
 
   

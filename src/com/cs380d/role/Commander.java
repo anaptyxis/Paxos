@@ -13,6 +13,7 @@ import message.PreemptedMessage;
 import application.Server;
 
 import value.BallotNum;
+import value.Constant;
 import value.Pvalue;
 
 /**
@@ -42,6 +43,9 @@ public class Commander extends NodeRole {
   public void execute() {
     for (int acpt : acceptors) {
       waitingList.add(acpt);
+      if(Constant.DEBUG){
+  		System.out.println("I am sending out commander, and the pvalue is " + pv.toString());
+  	   }
       send(acpt, new Phase2aMessage(pid, pv));
     }
     // the server is working correctly

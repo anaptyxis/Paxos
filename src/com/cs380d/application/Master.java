@@ -56,11 +56,11 @@ public class Master {
                * of them
                */
         try {
-          Thread.sleep(500);
+          Thread.sleep(2000);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
-
+        paxos.killAll();
       } else if (inputLine[0].equals("crashServer")) {
         nodeIndex = Integer.parseInt(inputLine[1]);
               /*

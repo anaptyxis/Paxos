@@ -28,8 +28,8 @@ public class Node extends Thread{
   public int numClients;
   private MessageFIFO msgQueue;
   public Paxos paxos;
-  private NetController nc;
-  private Config config;
+  protected NetController nc;
+  protected Config config;
   int[] acceptors;
   int[] replicas;
   public int[] clients;
@@ -60,9 +60,9 @@ public class Node extends Thread{
     
     try {
     	if(isClient)
-    		config = new Config(id,numServers+numClients);
+    		config = new Config(id+numServers,numServers+numClients);
     	else
-    		config = new Config(id-1+numClients,numServers+numClients);
+    		config = new Config(id-1,numServers+numClients);
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -80,20 +80,25 @@ public class Node extends Thread{
    * server numClient - numServer + numClient - 1
    */
   public void send(Message msg) {
-	 /*
+	 
 	 if (msg instanceof ResponseMessage) {
 	      //only message to client 
 	      int clientId = Math.abs(msg.dst);
-	      this.nc.sendMsg(clientId, msg.toString());
-	      
-	     // System.out.println("Delivered to client: " + clientId);
+	      this.nc.sendMsg(clientId+numServers, msg.toString());
+	      if(Constant.DEBUG){
+	        System.out.println("Delivered to client: " + clientId);
+	      }
 	    } else {
 	      int serverId = msg.dst / Constant.INTERLEAVE;
-	      this.nc.sendMsg(serverId -1 + numClients, msg.toString());
+	      this.nc.sendMsg(serverId -1 , msg.toString());
+	      
+	      if(Constant.DEBUG){
+	    	  System.out.println("Deliver to server " + serverId + " " + msg.toString());
+	      }
 	     
 	    }
-     */
-	 paxos.send(msg);
+     
+	 //paxos.send(msg);
   }
   
   /**
@@ -120,14 +125,18 @@ public class Node extends Thread{
    * dequeue the FIFO
    */
   public Message receive () {
-	/*
+	
 	List<String> rev = this.nc.getReceivedMsgs();
 	for(String tmp : rev){
+		if(Constant.DEBUG){
+    		System.out.println("I am "+pid+" ************** " + tmp);
+    	}
 		Message msg = Str2Msg(tmp);
 		msgQueue.enqueue(msg);
 	}
-	*/
-    return msgQueue.dequeue();
+	
+    Message result = msgQueue.dequeue();
+    return result;
   }
   
   /**
@@ -161,7 +170,9 @@ public class Node extends Thread{
 		   return result;
 	  }
 	  else if(split_input[0].contains("2a")){
+		 
 		  Phase2aMessage result = new Phase2aMessage(msg);
+		 
 		   return result;
 	  }
 	  else if(split_input[0].contains("2b")){

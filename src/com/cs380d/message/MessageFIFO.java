@@ -23,12 +23,8 @@ public class MessageFIFO {
    * threads waiting to enqueue items if queue is full.
    */
   public synchronized void enqueue(Message msg) {
-    while (queue.size() == size) {
-      waitForQueue();
-    }
-    if (queue.size() == 0) {
-      notifyAll();
-    }
+    if (queue.size() == size) 
+    	return;
     queue.add(msg);
   }
 
@@ -37,19 +33,24 @@ public class MessageFIFO {
    * threads waiting to dequeue items if queue is empty.
    */
   public synchronized Message dequeue() {
+	/*
     while (this.queue.size() == 0) {
       waitForQueue();
     }
     if (queue.size() == size) {
       notifyAll();
     }
-
-    return queue.remove(0);
+    */
+    if(queue.size() > 0)
+    	return queue.remove(0);
+    else{
+    	return null;
+    }
   }
 
   /**
    * wait function for blocking queue
-   */
+  
   public void waitForQueue() {
     try {
       wait();
@@ -57,4 +58,5 @@ public class MessageFIFO {
       e.printStackTrace();
     }
   }
+  */
 }

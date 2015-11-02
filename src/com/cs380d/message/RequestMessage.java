@@ -23,7 +23,8 @@ public class RequestMessage extends Message {
   public RequestMessage (String message) {
 	 String[] split = message.split(Constant.DELIMITER);
 	 src = Integer.parseInt(split[1]);
-	 prop = new Command(split[2]);
+	 dst = Integer.parseInt(split[2]);
+	 prop = new Command(split[3]);
   }
   
   
@@ -33,6 +34,6 @@ public class RequestMessage extends Message {
    */
   @Override
   public String toString() {
-    return "Request Message" + Constant.DELIMITER + src + Constant.DELIMITER + prop.toString();
+    return "Request Message" + Constant.DELIMITER + src + Constant.DELIMITER+ dst+ Constant.DELIMITER + prop.toString();
   }
 }

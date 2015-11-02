@@ -22,7 +22,8 @@ public class Phase2aMessage extends Message {
   public Phase2aMessage (String message) {
 	   String[] split = message.split(Constant.DELIMITER);
 	   src = Integer.parseInt(split[1]);
-	   pv= new Pvalue(split[2]);
+	   dst = Integer.parseInt(split[2]);
+	   pv= new Pvalue(split[3]);
   }
   
   /**
@@ -30,7 +31,11 @@ public class Phase2aMessage extends Message {
    */
   @Override
   public String toString () {
-    return "Phase 2a Message"+Constant.DELIMITER + src + Constant.DELIMITER + pv.toString();
+    String tmp =  "Phase 2a Messages"+Constant.DELIMITER + src + Constant.DELIMITER + dst +Constant.DELIMITER+ pv.toString();
+    if(Constant.DEBUG){
+		System.out.println("||||||||||||||||||||||||||||| " + tmp);
+	}
+    return tmp;
   }
 
 }

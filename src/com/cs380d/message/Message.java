@@ -1,7 +1,6 @@
 package message;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import value.Constant;
 import value.Pvalue;
@@ -13,7 +12,7 @@ import value.Pvalue;
 public abstract class Message {
 
   public int src;
-  public int dst;
+  public int dst = -1;
 
 
   /**
@@ -32,6 +31,9 @@ public abstract class Message {
    */
   public String PvalueSet2Str(HashSet<Pvalue> p) {
 	  String result = null;
+	  if(p == null){
+		  return "nothing";
+	  }
 	  for(Pvalue tmp : p){
 		  result+=tmp.toString();
 		  result+=Constant.PVALUESETDELIMITER;
@@ -40,7 +42,7 @@ public abstract class Message {
 		  int length = result.length();
 		  return result.substring(0,length-1);
 	  }else{
-		  return null;
+		  return "nothing";
 	  }
   }
   
@@ -51,12 +53,21 @@ public abstract class Message {
    */
   public HashSet<Pvalue> str2PvalueSet(String message){
 	  HashSet<Pvalue> result = new HashSet<Pvalue>();
-	  String[] split = message.split(Constant.PVALUESETDELIMITER);
-	  for(int i = 0 ; i < split.length; i++){
-		  Pvalue tmp = new Pvalue(split[i]);
-		  result.add(tmp);
-	  }
-	  return result;
+	  String tmp1 = null;
+	  if(!message.equals("nothing")){
+		  //System.out.println("Pvalue message is "+message);
+		  String[] split = message.split(Constant.PVALUESETDELIMITER);
+	  	  for(int i = 0 ; i < split.length; i++){
+	  		  if(!split[i].equals(tmp1)){
+	  			  //System.out.println("Pvalue is "+split[i]);
+	  			  Pvalue tmp = new Pvalue(split[i]);
+	  			  result.add(tmp);
+	  		  }
+	  	  }
+	  	  return result;
+  	  }else{
+  		  return null;
+  	  }
 	
   }
 }

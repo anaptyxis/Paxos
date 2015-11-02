@@ -22,9 +22,12 @@ public class BallotNum implements Comparable<BallotNum> {
    * @param message string
    */
   public BallotNum(String message) {
-	  String[] split = message.split(Constant.BALLOTDELIMITER);
-	  round = Integer.parseInt(split[1]);
-	  pid = Integer.parseInt(split[2]);
+	  if(Constant.DEBUG){
+		  System.out.println("Config the ballot is " + message);
+	  }
+	  String[] splits = message.split(Constant.BALLOTDELIMITER);
+	  round = Integer.parseInt(splits[1]);
+	  pid = Integer.parseInt(splits[2]);
   }
 
   /**

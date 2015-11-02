@@ -12,6 +12,7 @@ import message.ResponseMessage;
 import application.Server;
 
 import value.Command;
+import value.Constant;
 
 /**
  * @author zhangtian
@@ -81,6 +82,9 @@ public class Replica extends NodeRole {
 	// server is working
     while (true) {
       Message msg = receive();
+      if(Constant.DEBUG && msg != null){
+    	  System.out.println("I am replica "+ Integer.toString(pid) +" , and what I receive is " + msg.toString());
+      }
       // receive a request from client
       // propose with lowest unused slot
       if (msg instanceof RequestMessage) {

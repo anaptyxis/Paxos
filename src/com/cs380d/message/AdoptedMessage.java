@@ -30,8 +30,9 @@ public class AdoptedMessage extends Message {
   public AdoptedMessage(String message){
 	  String[] split = message.split(Constant.DELIMITER);
 	  src = Integer.parseInt(split[1]);
-	  ballotNum = new BallotNum(split[2]);
-	  accepted = str2PvalueSet(split[3]);
+	  dst = Integer.parseInt(split[2]);
+	  ballotNum = new BallotNum(split[3]);
+	  accepted = str2PvalueSet(split[4]);
   }
   
 
@@ -42,6 +43,6 @@ public class AdoptedMessage extends Message {
   @Override
   public String toString() {
 	
-    return "Adopted Message"+ Constant.DELIMITER + src + Constant.DELIMITER + ballotNum.toString()+ Constant.DELIMITER+PvalueSet2Str(accepted) ;
+    return "Adopted Message"+ Constant.DELIMITER + src + Constant.DELIMITER+ dst + Constant.DELIMITER + ballotNum.toString()+ Constant.DELIMITER+PvalueSet2Str(accepted) ;
   }
 }

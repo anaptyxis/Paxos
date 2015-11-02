@@ -48,16 +48,20 @@ public class Scout extends NodeRole {
       
       if (msg instanceof Phase1bMessage) {
         Phase1bMessage p1b = (Phase1bMessage) msg;
+       
         if (b.compareTo(p1b.ballotNum) == 0) {
-          if (waitfor.contains(p1b.src)) {
-            pvalues.addAll(p1b.accepted);
-            waitfor.remove(p1b.src);
-          }
-          if (waitfor.size() < (acceptors.length + 1) / 2) {
-            Message adopted = new AdoptedMessage(pid, b, pvalues);
-            send(lambda, adopted);
-            return; // exit();
-          }
+        	 if(Constant.DEBUG)
+             	  System.out.println("I am scout, receive p1b message "+ msg.toString());
+        	 if (waitfor.contains(p1b.src)) {
+        		 if(p1b.accepted!=null)
+        			 pvalues.addAll(p1b.accepted);
+        		 waitfor.remove(p1b.src);
+        	 }
+        	 if (waitfor.size() < (acceptors.length + 1) / 2) {
+        		 Message adopted = new AdoptedMessage(pid, b, pvalues);
+        		 send(lambda, adopted);
+        		 return; // exit();
+        	 }
         } else {
           send(lambda, new PreemptedMessage(pid, p1b.ballotNum));
           return; // exit();

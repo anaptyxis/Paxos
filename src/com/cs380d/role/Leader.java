@@ -14,6 +14,7 @@ import application.Server;
 
 import value.BallotNum;
 import value.Command;
+import value.Constant;
 import value.Pvalue;
 
 /**
@@ -51,6 +52,9 @@ public class Leader extends NodeRole {
           Command p = propMsg.prop;
           proposals.put(s, p);
           if (active) {
+        	if(Constant.DEBUG){
+          		System.out.println("+++++++++++++++");
+          	}
             new Commander(server.nextId(), server, pid, acceptors, replicas, new Pvalue(ballotNum, s, p)).start();
           }
         }

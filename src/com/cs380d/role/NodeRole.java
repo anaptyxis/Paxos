@@ -27,7 +27,7 @@ public class NodeRole extends Thread{
 		    msg.dst = dst;
 		    //server send the message
 		    if (Constant.DEBUG){
-		    	System.out.println("I am sendint to" + Integer.toString(dst)+ " " + msg);
+		    	System.out.println("I am sending to" + Integer.toString(dst)+ " " + msg);
 		    }
 		    server.send(msg);
 	  }

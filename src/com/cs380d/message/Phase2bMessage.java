@@ -19,7 +19,8 @@ public class Phase2bMessage extends Message {
 	  public Phase2bMessage (String message) {
 		  String[] splitStrings = message.split(Constant.DELIMITER);
 		  src = Integer.parseInt(splitStrings[1]);
-		  ballotNum = new BallotNum(splitStrings[2]);
+		  dst = Integer.parseInt(splitStrings[2]);
+		  ballotNum = new BallotNum(splitStrings[3]);
 	  }
 	  
 	  
@@ -29,6 +30,6 @@ public class Phase2bMessage extends Message {
 	   */
 	  @Override
 	  public String toString () {
-	    return "Phase 2b message" +Constant.DELIMITER+ src + Constant.DELIMITER + ballotNum.toString();
+	    return "Phase 2b message" +Constant.DELIMITER+ src + Constant.DELIMITER +dst + Constant.DELIMITER+ ballotNum.toString();
 	  }
 }
