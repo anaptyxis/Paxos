@@ -18,6 +18,7 @@ public class RecoveryRequestMessage extends Message {
 		public RecoveryRequestMessage(int pid) {
 		    src = pid;
 		}
+		
 	  /**
 	   * constructor
 	   */
