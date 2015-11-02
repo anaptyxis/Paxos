@@ -98,6 +98,12 @@ public class Leader extends NodeRole {
     }
   }
 
+  /*
+   *  get the pid of leader for heart beat message 
+   */
+   public int getLeaderID(){
+	   return pid;
+   }
  
 
 

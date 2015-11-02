@@ -48,8 +48,8 @@ public class Commander extends NodeRole {
   	   }
       send(acpt, new Phase2aMessage(pid, pv));
     }
-    // the server is working correctly
-    while (true) {
+    // while the server is working correctly
+    while (!server.shutdown) {
       Message msg = receive();
      
       if (msg instanceof Phase2bMessage) {
@@ -63,11 +63,11 @@ public class Commander extends NodeRole {
               Message decision = new DecisionMessage(pid, pv.slotNum, pv.prop);
               send(p, decision);
             }
-            return; // exit();
+            return; 
           }
         } else {
           send(lambda, new PreemptedMessage(pid, p2b.ballotNum));
-          return; // exit();
+          return; 
         }
       }
     }

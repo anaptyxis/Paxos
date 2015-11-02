@@ -17,6 +17,10 @@ public class Constant {
 	    public static final String COMMANDDELIMITER="#";
 	    public static final String BALLOTDELIMITER="!";
 	    
+	    
+	    // Heart beat message 
+	    
+	    public static final int HEARTBEATMESSAGEGAP = 100;
 	    //Debug
 	    public static final boolean DEBUG= false;
 

@@ -26,14 +26,13 @@ public class Acceptor extends NodeRole{
 	  
 	  @Override
 	  public void execute () {
-	 
-	      
-	     // if the system is not working 
-	      
-	      
-	      
-	     // if the system is working 
-	     while(true){
+	 	      
+      while(!server.shutdown){
+    	  // if the system is not working 
+    	  if(server.shutdown){
+    		  return;
+    	  }
+	      // if the system is working 
 	      Message msg = receive();
 	      if(Constant.DEBUG && msg != null){
 	    	  System.out.println("I am acceptor "+ Integer.toString(pid)+" , and what I receive is " + msg.toString());
