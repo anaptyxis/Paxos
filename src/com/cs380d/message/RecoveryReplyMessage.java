@@ -26,6 +26,9 @@ public class RecoveryReplyMessage extends Message{
 		 String[] split = message.split(Constant.DELIMITER);
 		 src = Integer.parseInt(split[1]);
 		 dst = Integer.parseInt(split[2]);
+		 slotNum = Integer.parseInt(split[3]);
+		 decisions = str2DecMap(split[4]);
+		 leaderID = Integer.parseInt(split[5]);
 	  }
 	  
 	  /**
@@ -34,7 +37,7 @@ public class RecoveryReplyMessage extends Message{
 	  @Override
 	  public String toString() {
 	    return "RecoveryReply Message" + Constant.DELIMITER + src + Constant.DELIMITER+ dst + Constant.DELIMITER+ 
-	    		slotNum + Constant.DELIMITER + leaderID;
+	    		slotNum + Constant.DELIMITER + decMap2Str(decisions)+Constant.DELIMITER+leaderID;
 	  }
 
 	
