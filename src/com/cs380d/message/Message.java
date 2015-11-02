@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.sun.corba.se.spi.orb.StringPair;
+
 import value.Command;
 import value.Constant;
 import value.Pvalue;
@@ -96,10 +98,10 @@ public abstract class Message {
 		  //System.out.println("Pvalue message is "+message);
 		  String[] split = message.split(Constant.DECISIONLISTDELIMITER);
 	  	  for(int i = 0 ; i < split.length; i++){
-	  		      
-	  			  
-	  			  
-	  			  
+	  		   String[] tmpSplit = split[i].split(Constant.DECISIONDELIMITER);
+	  		   Integer k = Integer.parseInt(tmpSplit[0]);
+	  		   Command value = new Command(tmpSplit[1]);
+	  		   result.put(k, value);
 	  	  }
 	  	  
 	  	  return result;
@@ -108,7 +110,7 @@ public abstract class Message {
   	  }
 	
  	   
- 	   return result;
+ 	   
     }
 }
 
