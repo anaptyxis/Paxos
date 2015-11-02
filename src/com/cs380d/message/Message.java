@@ -1,7 +1,10 @@
 package message;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
+import value.Command;
 import value.Constant;
 import value.Pvalue;
 
@@ -61,5 +64,51 @@ public abstract class Message {
   	  }
 	
   }
+  
+  /**
+   * convert dicision map to string
+   * @param decision map
+   */
+   public String decMap2Str(Map<Integer, Command> dec){
+	   String result = null;
+	   for (Map.Entry<Integer, Command> entry : dec.entrySet()) {
+		    Integer key = entry.getKey();
+		    Command value = entry.getValue();
+		    String tmpString = Integer.toString(key) + Constant.DECISIONDELIMITER+value.toString();
+		    result = result + tmpString + Constant.DECISIONLISTDELIMITER;
+		}
+	   if(result !=null){
+			  int length = result.length();
+			  return result.substring(0,length-1);
+		}else{
+			  return "nothing";
+		}
+   }
+   
+   
+   /**
+    * convert String back to decision map
+    * @param decision map
+    */
+    public Map<Integer, Command> str2DecMap(String message){
+ 	   Map<Integer, Command> result = new HashMap<Integer, Command>();
+ 	  if(!message.equals("nothing")){
+		  //System.out.println("Pvalue message is "+message);
+		  String[] split = message.split(Constant.DECISIONLISTDELIMITER);
+	  	  for(int i = 0 ; i < split.length; i++){
+	  		      
+	  			  
+	  			  
+	  			  
+	  	  }
+	  	  
+	  	  return result;
+  	  }else{
+  		  return null;
+  	  }
+	
+ 	   
+ 	   return result;
+    }
 }
 

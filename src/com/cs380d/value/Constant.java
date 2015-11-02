@@ -16,7 +16,8 @@ public class Constant {
 	    public static final String PVALUESETDELIMITER="^";
 	    public static final String COMMANDDELIMITER="#";
 	    public static final String BALLOTDELIMITER="!";
-	    
+	    public static final String DECISIONLISTDELIMITER = "$";
+	    public static final String DECISIONDELIMITER = "=";
 	    
 	    // Heart beat message 
 	    

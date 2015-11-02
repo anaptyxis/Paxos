@@ -1,15 +1,24 @@
 package message;
 
+import java.util.Map;
+
 import value.Constant;
+import value.Command;
 
 public class RecoveryReplyMessage extends Message{
-
+	  public int slotNum;
+	  public int leaderID;
+	  public Map<Integer, Command> decisions;
 	  /**
 	   * constructor
 	   */
-		public RecoveryReplyMessage(int pid) {
+	  public RecoveryReplyMessage(int pid, int s, Map<Integer, Command> d, int leader) {
 		    src = pid;
-		}
+		    slotNum = s;
+		    decisions = d;
+		    leaderID = leader;
+
+	  }
 	  /**
 	   * constructor
 	   */
@@ -24,7 +33,8 @@ public class RecoveryReplyMessage extends Message{
 	   */
 	  @Override
 	  public String toString() {
-	    return "RecoveryReply Message" + Constant.DELIMITER + src + Constant.DELIMITER+ dst;
+	    return "RecoveryReply Message" + Constant.DELIMITER + src + Constant.DELIMITER+ dst + Constant.DELIMITER+ 
+	    		slotNum + Constant.DELIMITER + leaderID;
 	  }
 
 	

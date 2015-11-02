@@ -36,7 +36,7 @@ public class Commander extends NodeRole {
     this.pv = p;
     this.b = p.ballotNum;
 
-    ctrl.roles.put(pid, this);
+    server.roles.put(pid, this);
   }
 
   @Override
