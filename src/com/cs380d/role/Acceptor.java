@@ -11,7 +11,6 @@ import message.Phase2bMessage;
 import application.Server;
 
 import value.BallotNum;
-import value.Constant;
 import value.Pvalue;
 
 public class Acceptor extends NodeRole{
@@ -34,9 +33,7 @@ public class Acceptor extends NodeRole{
     	  }
 	      // if the system is working 
 	      Message msg = receive();
-	      if(Constant.DEBUG && msg != null){
-	    	  System.out.println("I am acceptor "+ Integer.toString(pid)+" , and what I receive is " + msg.toString());
-	      }
+	     
 	      // receive phase 1 message
 	      if (msg instanceof Phase1aMessage) {
 	        Phase1aMessage p1a = (Phase1aMessage) msg;
@@ -45,9 +42,7 @@ public class Acceptor extends NodeRole{
 	          ballotNum.set(b);
 	        }
 	        send(p1a.src, getMsg(1));
-	        if(Constant.DEBUG){
-	        	 System.out.println("I am acceptor, and I send to phase1b message to " + Integer.toString(p1a.src));
-	        }
+	       
 	      // receive phase 2 message
 	      } else if (msg instanceof Phase2aMessage) {	    	
 	        Phase2aMessage p2a = (Phase2aMessage) msg;

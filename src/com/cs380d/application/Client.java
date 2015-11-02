@@ -23,8 +23,7 @@ public class Client extends Node {
   HashMap<Integer, ResponseMessage> log;
   /**
    * Default constructor
-   * @param none
-   * dequeue the FIFO
+   * @param id, number of server, number of client, and paxos environment
    */
   public Client(int cid, int numServers, int numClients, Paxos paxos) {
     super(paxos, cid, numServers, numClients,true);

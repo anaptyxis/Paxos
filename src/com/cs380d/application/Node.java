@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import message.AdoptedMessage;
 import message.DecisionMessage;
+import message.HeartBeatMessage;
 import message.Message;
 import message.MessageFIFO;
 import message.Phase1aMessage;
@@ -129,7 +130,7 @@ public class Node extends Thread{
 	List<String> rev = this.nc.getReceivedMsgs();
 	for(String tmp : rev){
 		if(Constant.DEBUG){
-    		System.out.println("I am "+pid+" ************** " + tmp);
+    		System.out.println("I am "+pid+" receive message " + tmp );
     	}
 		Message msg = Str2Msg(tmp);
 		msgQueue.enqueue(msg);
@@ -194,6 +195,9 @@ public class Node extends Thread{
 	  else if(split_input[0].contains("Response")){
 		  ResponseMessage result = new ResponseMessage(msg);
 		   return result;
+	  }else if (split_input[0].contains("HeartBeat")){
+		    HeartBeatMessage result = new HeartBeatMessage(msg);
+		    return result;
 	  }else{
 		  System.out.println("receive wrong message");
 		  return null;

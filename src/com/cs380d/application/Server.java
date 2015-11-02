@@ -1,12 +1,18 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.media.j3d.AmbientLight;
+
+import message.HeartBeatMessage;
 import message.Message;
 import message.Phase1aMessage;
 import message.Phase2aMessage;
+import message.RequestMessage;
 import message.ResponseMessage;
 import role.Acceptor;
 import role.Leader;
@@ -54,7 +60,15 @@ public class Server extends Node {
   Replica replica;
   Acceptor acceptor;
   Leader leader;
-   
+  
+  /*Hear beat message handler*/
+  private HeartBeatMessageHandler  hbmHandler ;
+  
+  
+  /*active client list , and server only send to active client*/
+  
+  private HashSet<Integer> activeClient;
+  
   /**
  	 * Default constructor for Server
  	 * @param Id, number of server, number of client, the paxos environment, whether it is recover thread
@@ -71,7 +85,7 @@ public class Server extends Node {
       Map<Integer, Command> committed = new HashMap<Integer, Command>();
       int rpid = bind(index, Constant.REPLICA);
       replica = new Replica(rpid, this, committed, 0);
-
+      
       initialization();
     }
   }
@@ -81,7 +95,21 @@ public class Server extends Node {
 	 * @param none
 	 */
   public void recover () {
-   
+	  // recover as replica
+	  
+	  
+	  // send out message to get other replica's info
+	  // decision and slot number
+	  
+	  
+	  
+	  // know the current leader
+	  
+	  
+	  // Initialize the replica
+	  
+	  
+	  // initialize the server
   }
 
   /**
@@ -93,11 +121,13 @@ public class Server extends Node {
     acceptor = new Acceptor(bind(index, Constant.ACCEPTOR), this);
 
     if (isLeader()) {
+    	 
       leader = new Leader(bind(index, Constant.LEADER), this, acceptors, replicas);
     } else {
       leader = null;
     }
-
+    activeClient = new HashSet<Integer>();
+    hbmHandler = new HeartBeatMessageHandler(this);
    
  }
 
@@ -112,21 +142,38 @@ public class Server extends Node {
     if (isLeader()) {
       leader.start();
     }
-    
-
-
+    // start heart beat handler
+    hbmHandler.start();
+    // while I am working  
     while (!shutdown) {
       Message msg = receive();
       if(Constant.DEBUG && msg!=null){
     	  System.out.println("I am server "+ pid +"  receive message " + msg.toString());
   	  }
-      /*
+      
       if (shutdown) {
         return;
-      }*/
-      if (msg != null) {
-        relay(msg);
       }
+      if (msg instanceof HeartBeatMessage) {
+          hbmHandler.reset();
+          if (Constant.DEBUG) {
+             System.out.println ("I am server "+index + ": leader election timer refreshed");
+          }
+          // learn the new leader from new leader's heart beat message
+          int newLeader = msg.src / Constant.INTERLEAVE;
+          if (newLeader != leaderID) {
+            leaderID = newLeader;
+            if (Constant.DEBUG) {
+              System.out.println ("New leader detected from heart beat message: " + leaderID);
+            }
+          }
+       } else if (msg != null) {
+    	  // update the active list of client
+    	  if (msg instanceof RequestMessage){
+    		  activeClient.add(msg.src);
+    	  }
+          relay(msg);
+       }
     }
   }
 
@@ -258,15 +305,18 @@ public class Server extends Node {
    if (msg instanceof ResponseMessage) {
 	      //only message to client 
 	      int clientId = Math.abs(msg.dst);
-	      nc.sendMsg(clientId+numServers, msg.toString());
-	      if(Constant.DEBUG){
-	        System.out.println("Delivered to client: " + clientId);
+	      // only send to active client
+	      if(activeClient.contains(clientId)){
+	    	  nc.sendMsg(clientId+numServers, msg.toString());
+	    	  if(Constant.DEBUG){
+	    		  System.out.println("Delivered to client: " + clientId);
+	    	  }
 	      }
 	    } else {
 	      int serverId = msg.dst / Constant.INTERLEAVE;
 	      if(serverId != pid){
 	    	  if(Constant.DEBUG){
-		    	  System.out.println("Deliver to server " + serverId + "()()()()()() " + msg.toString());
+		    	  System.out.println("Deliver to server " + serverId + msg.toString());
 		      }
 	    	  nc.sendMsg(serverId -1 , msg.toString());
 	      }else{

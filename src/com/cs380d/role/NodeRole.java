@@ -15,6 +15,9 @@ public class NodeRole extends Thread{
 	  public NodeRole (int id, Server s) {
 	    pid = id;
 	    server = s;
+	    if(Constant.DEBUG){
+	    	  System.out.println("Initilize server for node role "+id+" " + server.index);
+	      }
 	    msgQueue = new MessageFIFO();
 	  }
 	  

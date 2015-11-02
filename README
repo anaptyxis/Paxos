@@ -1,3 +1,7 @@
+Complie the project
+
+Run make paxos
+
 Using the autograder:
 
 Run "python tester.py" and check your output.

@@ -38,20 +38,22 @@ public class Scout extends NodeRole {
   public void execute () {
     for (int acpt : acceptors) {
       waitfor.add(acpt);
-      if(Constant.DEBUG)
-    	  System.out.println("I am scout, send to " + Integer.toString(acpt));
+      
       send(acpt, new Phase1aMessage(pid, b));
     }
     // the server is working
-    while (true) {
+    while (!server.shutdown) {
+      // if server is shut down
+      if(server.shutdown){
+    	  return;
+      }
       Message msg = receive();
       
       if (msg instanceof Phase1bMessage) {
         Phase1bMessage p1b = (Phase1bMessage) msg;
        
         if (b.compareTo(p1b.ballotNum) == 0) {
-        	 if(Constant.DEBUG)
-             	  System.out.println("I am scout, receive p1b message "+ msg.toString());
+        	
         	 if (waitfor.contains(p1b.src)) {
         		 if(p1b.accepted!=null)
         			 pvalues.addAll(p1b.accepted);
@@ -60,11 +62,11 @@ public class Scout extends NodeRole {
         	 if (waitfor.size() < (acceptors.length + 1) / 2) {
         		 Message adopted = new AdoptedMessage(pid, b, pvalues);
         		 send(lambda, adopted);
-        		 return; // exit();
+        		 return; 
         	 }
         } else {
           send(lambda, new PreemptedMessage(pid, p1b.ballotNum));
-          return; // exit();
+          return;
         }
       }
     }

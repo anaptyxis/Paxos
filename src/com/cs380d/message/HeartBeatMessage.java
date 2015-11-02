@@ -28,10 +28,11 @@ public class HeartBeatMessage extends Message {
 		  public HeartBeatMessage (String message){
 			   String[] split = message.split(Constant.DELIMITER);
 			   src = Integer.parseInt(split[1]);
+			   dst = Integer.parseInt(split[2]);
 		  }
 
 		  @Override
 		  public String toString() {
-		    return "HeartBeat message "+ Constant.DELIMITER + src;
+		    return " HeartBeat message "+ Constant.DELIMITER + src + Constant.DELIMITER + dst;
 		  }
 }

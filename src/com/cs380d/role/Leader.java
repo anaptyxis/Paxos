@@ -10,6 +10,7 @@ import message.Message;
 import message.PreemptedMessage;
 import message.ProposeMessage;
 
+import application.HeartBeatSender;
 import application.Server;
 
 import value.BallotNum;
@@ -26,7 +27,8 @@ public class Leader extends NodeRole {
   public HashMap<Integer, Command> proposals;
   public int[] acceptors;
   public int[] replicas;
-
+  public HeartBeatSender hbs;
+  
   public Leader(int pid, Server s, int[] acceptors, int[] replicas) {
     super(pid, s);
     this.acceptors = acceptors;
@@ -35,14 +37,22 @@ public class Leader extends NodeRole {
     active = false;
     proposals = new HashMap<Integer, Command>();
     server.roles.put(pid, this);
+    
   }
 
   @Override
   public void execute () {
-   
+    // broadcast heart beat message
+	hbs = new HeartBeatSender(server, this);
+    hbs.start();
+    // send out scout
     new Scout(server.nextId(), server, pid, acceptors, ballotNum).start();
     // server is working
-    while (true) {
+    while (!server.shutdown) {
+      //if is not working , just return
+      if(server.shutdown){
+    	  return;
+      }
       Message msg = receive();
       
       if (msg instanceof ProposeMessage) {
@@ -52,9 +62,7 @@ public class Leader extends NodeRole {
           Command p = propMsg.prop;
           proposals.put(s, p);
           if (active) {
-        	if(Constant.DEBUG){
-          		System.out.println("+++++++++++++++");
-          	}
+        	
             new Commander(server.nextId(), server, pid, acceptors, replicas, new Pvalue(ballotNum, s, p)).start();
           }
         }

@@ -80,11 +80,13 @@ public class Replica extends NodeRole {
   @Override
   public void execute () {
 	// server is working
-    while (true) {
-      Message msg = receive();
-      if(Constant.DEBUG && msg != null){
-    	  System.out.println("I am replica "+ Integer.toString(pid) +" , and what I receive is " + msg.toString());
+    while (!server.shutdown) {
+      // if not working , just return
+      if(server.shutdown){
+    	  return;
       }
+      Message msg = receive();
+    
       // receive a request from client
       // propose with lowest unused slot
       if (msg instanceof RequestMessage) {

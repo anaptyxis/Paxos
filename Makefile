@@ -7,7 +7,7 @@ test_simple:
 	cat tests/1_simpleTest.test | $(cat COMMAND) 
 
 clean:
-	rm  bin/*.class 
+	rm  bin/* 
 
 
 
