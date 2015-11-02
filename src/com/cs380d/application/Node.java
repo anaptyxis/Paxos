@@ -14,6 +14,8 @@ import message.Phase2aMessage;
 import message.Phase2bMessage;
 import message.PreemptedMessage;
 import message.ProposeMessage;
+import message.RecoveryReplyMessage;
+import message.RecoveryRequestMessage;
 import message.RequestMessage;
 import message.ResponseMessage;
 import value.Constant;
@@ -197,6 +199,12 @@ public class Node extends Thread{
 		   return result;
 	  }else if (split_input[0].contains("HeartBeat")){
 		    HeartBeatMessage result = new HeartBeatMessage(msg);
+		    return result;
+	  }else if (split_input[0].contains("RecoveryReq")){
+		    RecoveryRequestMessage result = new RecoveryRequestMessage(msg);
+		    return result;
+	  }else if (split_input[0].contains("RecoveryReply")){
+		    RecoveryReplyMessage result = new RecoveryReplyMessage(msg);
 		    return result;
 	  }else{
 		  System.out.println("receive wrong message");

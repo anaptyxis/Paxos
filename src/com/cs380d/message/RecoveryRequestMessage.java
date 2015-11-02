@@ -27,14 +27,13 @@ public class RecoveryRequestMessage extends Message {
 		 dst = Integer.parseInt(split[2]);
 	  }
 		  
-	  
-	  
+	  	  
 	  /**
 	   * convert message to string
 	   */
 	  @Override
 	  public String toString() {
-	    return "Recovery Request Message" + Constant.DELIMITER + src + Constant.DELIMITER+ dst+ Constant.DELIMITER + prop.toString();
+	    return "RecoveryReq Message" + Constant.DELIMITER + src + Constant.DELIMITER+ dst;
 	  }
 
 

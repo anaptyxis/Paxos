@@ -18,5 +18,14 @@ public class RecoveryReplyMessage extends Message{
 		 src = Integer.parseInt(split[1]);
 		 dst = Integer.parseInt(split[2]);
 	  }
+	  
+	  /**
+	   * convert message to string
+	   */
+	  @Override
+	  public String toString() {
+	    return "RecoveryReply Message" + Constant.DELIMITER + src + Constant.DELIMITER+ dst;
+	  }
+
 	
 }
