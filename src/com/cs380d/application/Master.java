@@ -62,7 +62,7 @@ public class Master {
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
-        paxos.killAll();
+        
       } else if (inputLine[0].equals("crashServer")) {
         nodeIndex = Integer.parseInt(inputLine[1]);
               /*

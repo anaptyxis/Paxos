@@ -80,9 +80,9 @@ public class Paxos {
 		 */
 		
 		public void reviveServer(int serverID){
-			 
+			serverList[serverID] = new Server(serverID + 1, serverList.length, clientList.length, this,true);
 			serverList[serverID].recover();
-			  
+		    serverList[serverID].start();  
 		}
 		
 		/**
@@ -95,31 +95,7 @@ public class Paxos {
 			  
 		}
 		
-		/*
-		public void send(Message msg) {
-		   
-		    if (msg instanceof ResponseMessage) {
-		      /only message to client 
-		      int clientId = Math.abs(msg.dst);
-		      assert clientId < clientList.length;
-		      clientList[clientId].deliver(msg);
-		      System.out.println("Delivered to client: " + clientId);
-		    } else {
-		      int serverId = msg.dst / Constant.INTERLEAVE;
-		      System.out.println("*********>>>>" + serverId + "\t" + msg.dst+msg);
-		      assert serverId <= serverList.length;
-		      serverList[serverId - 1].deliver(msg);
-		    }
-		  }
-		*/
 		
-		/*
-		 * Kill all running process 
-		 */
-		
-		public void killAll() {
-		
-		}
 		
 		
 }
