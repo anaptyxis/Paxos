@@ -122,6 +122,24 @@ public class Replica extends NodeRole {
      
     }
   }
+  
+  //returns leader ID
+  public int recover(int[] replicas) {
+	  for (int id = 0; id < replicas.length; id++)
+		  if (id != this.pid)
+			  send(id, new RecoveryRequestMessage(this.pid));
+	  Message msg = receive();
+	  if (msg instanceof RecoveryReplyMessage) {
+		  RecoveryReplyMessage recRepMsg = (RecoveryReplyMessage) msg;
+		  this.slotNum = recRepMsg.slotNum;
+		  this.decisions = recRepMsg.decisions;
+		  return recRepMsg.leaderID;
+	  } else {
+		  System.err.println("Recovering Replica received non-recovery message.");
+		  return -1;
+	  }
+		  
+  }
 
  
 }

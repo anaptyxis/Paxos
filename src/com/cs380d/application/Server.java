@@ -93,10 +93,7 @@ public class Server extends Node {
 	 */
   public void recover () {
 	  // recover as replica
-	  
-	  
-	  // send out message to get other replica's info
-	  // decision and slot number
+	  leaderID = replica.recover(replicas);
 	  
 	  
 	  
