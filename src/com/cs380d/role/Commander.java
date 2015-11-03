@@ -47,6 +47,9 @@ public class Commander extends NodeRole {
     }
     // while the server is working correctly
     while (!server.shutdown) {
+      if(server.shutdown){
+    	  return;
+      }
       Message msg = receive();
      
       if (msg instanceof Phase2bMessage) {

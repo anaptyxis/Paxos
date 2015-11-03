@@ -9,8 +9,4 @@ sendMessage 2 hello_4
 allClear
 sendMessage 2 hello_4
 allClear
-printChatLog 0
 printChatLog 1
-printChatLog 2
-printChatLog 3
-printChatLog 4

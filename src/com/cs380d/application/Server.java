@@ -9,6 +9,8 @@ import message.HeartBeatMessage;
 import message.Message;
 import message.Phase1aMessage;
 import message.Phase2aMessage;
+import message.RecoveryReplyMessage;
+import message.RecoveryRequestMessage;
 import message.RequestMessage;
 import message.ResponseMessage;
 import role.Acceptor;
@@ -93,17 +95,58 @@ public class Server extends Node {
 	 */
   public void recover () {
 	  // recover as replica
-	  leaderID = replica.recover(replicas);
-	  
-	  
-	  
-	  // know the current leader
-	  
-	  
-	  // Initialize the replica
-	  
-	  
-	  // initialize the server
+	  int newPid = bind(index, Constant.REPLICA);
+	  if (Constant.DEBUG) {
+	        System.out.println("Receive replica reply message");
+	       // System.out.println(msg);
+	      }
+	  // ask others for help
+	  RecoveryReplyMessage msg = getReplicaReply(newPid);
+	  if (Constant.DEBUG) {
+	        System.out.println("Receive replica reply message " + msg);
+	       // System.out.println(msg);
+	      }
+	  if (msg != null) {
+	     
+	      //know the current leader
+	      leaderID = msg.leaderID;
+	      
+	      // Initialize the replica
+	      replica = new Replica(newPid, this, msg.decisions, msg.slotNum);
+	      // initialize the server
+	      initialization();
+	    }
+  }
+  
+  /*
+   *  recover inquiry function
+   *  When server recover, it send to others ask for its 
+   */
+  public RecoveryReplyMessage getReplicaReply (int src) {
+	    // send to all replicas with the recover request
+	    // System.out.println("ask others for help");
+	  while(!shutdown){
+		 if (shutdown) {
+		       return null;
+		 }
+	    for (int pid : replicas) {
+	      if(pid != src)
+	    	  //System.out.println("I am " + src + " ask " + pid +" for help");
+	    	  send(pid, new RecoveryRequestMessage(src));
+	    }
+	    
+	    // blocking until receive response
+	   
+	      Message msg = receive();
+	      
+	      //System.out.println("I am receiveing recover message ");
+	      if (msg instanceof RecoveryReplyMessage) {
+	        return (RecoveryReplyMessage) msg;
+	      }
+	    
+	    
+	  }
+	  return null;
   }
 
   /**
@@ -251,6 +294,7 @@ public class Server extends Node {
    */
   public void cleanShutDown () {
     shutdown = true;
+    nc.shutdown();
   }
 
 
@@ -263,6 +307,7 @@ public class Server extends Node {
 	    if (isLeader()) {
 	      if (msgCount == 0) {
 	        cleanShutDown();
+	        
 	      } else {
 	        messageCount = msgCount;
 	      }

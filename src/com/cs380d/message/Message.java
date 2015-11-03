@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import com.sun.corba.se.spi.orb.StringPair;
-
 import value.Command;
 import value.Constant;
 import value.Pvalue;
@@ -26,15 +24,15 @@ public abstract class Message {
    * @param message string
    */
   public String PvalueSet2Str(HashSet<Pvalue> p) {
-	  String result = null;
-	  if(p == null){
+	  String result = "";
+	  if(p.isEmpty()){
 		  return "nothing";
 	  }
 	  for(Pvalue tmp : p){
 		  result+=tmp.toString();
 		  result+=Constant.PVALUESETDELIMITER;
 	  }
-	  if(result !=null){
+	  if(!result.equals("")){
 		  int length = result.length();
 		  return result.substring(0,length-1);
 	  }else{
@@ -72,14 +70,15 @@ public abstract class Message {
    * @param decision map
    */
    public String decMap2Str(Map<Integer, Command> dec){
-	   String result = null;
+	   String result = "";
 	   for (Map.Entry<Integer, Command> entry : dec.entrySet()) {
 		    Integer key = entry.getKey();
 		    Command value = entry.getValue();
 		    String tmpString = Integer.toString(key) + Constant.DECISIONDELIMITER+value.toString();
 		    result = result + tmpString + Constant.DECISIONLISTDELIMITER;
 		}
-	   if(result !=null){
+	   //System.out.println("result is " + result);
+	   if(!result.equals("")){
 			  int length = result.length();
 			  return result.substring(0,length-1);
 		}else{
@@ -93,6 +92,7 @@ public abstract class Message {
     * @param decision map
     */
     public Map<Integer, Command> str2DecMap(String message){
+       //System.out.println("what I get is " + message);
  	   Map<Integer, Command> result = new HashMap<Integer, Command>();
  	  if(!message.equals("nothing")){
 		  //System.out.println("Pvalue message is "+message);

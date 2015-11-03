@@ -44,9 +44,9 @@ public class Pvalue implements Comparable<Pvalue> {
 		  }
 		  
 	  }
-	  ballotNum = new BallotNum(splitStrings[1]);
-	  slotNum = Integer.parseInt(splitStrings[2]);
-	  prop = new Command(splitStrings[3]);
+	  ballotNum = new BallotNum(splitStrings[0]);
+	  slotNum = Integer.parseInt(splitStrings[1]);
+	  prop = new Command(splitStrings[2]);
 	  
   }
   
@@ -56,7 +56,7 @@ public class Pvalue implements Comparable<Pvalue> {
    */
   @Override
   public String toString() {
-    String rst = "pvalue" + Constant.PVALUEDELIMITER + ballotNum.toString() + Constant.PVALUEDELIMITER + slotNum + Constant.PVALUEDELIMITER+prop.toString();
+    String rst = ballotNum.toString() + Constant.PVALUEDELIMITER + slotNum + Constant.PVALUEDELIMITER+prop.toString();
     return rst;
   }
 

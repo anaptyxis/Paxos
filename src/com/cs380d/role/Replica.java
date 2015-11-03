@@ -114,8 +114,10 @@ public class Replica extends NodeRole {
       if (msg instanceof RecoveryRequestMessage) {
     	  //build replica state to send
     	  //slotnum, decisions
+    	  //System.out.print("what I receive is " + msg);
     	  RecoveryReplyMessage srm = new RecoveryReplyMessage(pid, slotNum,
     			  new HashMap<Integer, Command>(decisions), server.leaderID);
+    	  //System.out.println("helps "+msg.src+" to recover " + srm);
     	  send(msg.src, srm);
     	  
       }
