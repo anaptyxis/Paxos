@@ -1,0 +1,10 @@
+start 3 2
+crashServer 0
+sendMessage 0 test_message
+allClear
+allClear
+allClear
+crashServer 1
+sendMessage 1 this_should_not_show_up
+allClear
+printChatLog 0
