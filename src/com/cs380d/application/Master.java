@@ -25,7 +25,7 @@ public class Master {
                * start up the right number of nodes and clients, and store the
                *  connections to them for sending further commands
                */
-        paxos = new Paxos(numNodes, numClients);
+        paxos = Paxos.getInstance(numNodes, numClients);
 
       } else if (inputLine[0].equals("sendMessage")) {
         clientIndex = Integer.parseInt(inputLine[1]);

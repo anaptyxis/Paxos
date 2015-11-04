@@ -20,6 +20,7 @@ public class Paxos {
 		public Client[] clientList;
 		public Config config;
 		public NetController ncController;
+		private static Paxos instance = null;
 		/**
 		 * Default Constructor
 		 * 
@@ -33,24 +34,30 @@ public class Paxos {
 		 * Config the paxos environment
 		 * @param numServers, number od client
 		 */
-		public Paxos(int numServers, int numClients) {
-			serverList = new Server[numServers];
-		    for (int i = 1; i <= numServers; i++) {
-		      serverList[i - 1] = new Server(i, numServers, numClients, this, false);
-		    }
+		private Paxos(int numServers, int numClients) {
+			
+				serverList = new Server[numServers];
+				for (int i = 1; i <= numServers; i++) {
+					serverList[i - 1] = new Server(i, numServers, numClients, this, false);
+				}
 
-		    clientList = new Client[numClients];
-		    for (int i = 0; i < numClients; i++) {
-		      clientList[i] = new Client(i, numServers, numClients, this);
-		      clientList[i].start();
-		    }
-		    //
-		    for (int i = numServers - 1; i >= 0; i--) {
-		      serverList[i].start();
-		    }
-		   
-		    
+				clientList = new Client[numClients];
+				for (int i = 0; i < numClients; i++) {
+					clientList[i] = new Client(i, numServers, numClients, this);
+					clientList[i].start();
+				}
+				//
+				for (int i = numServers - 1; i >= 0; i--) {
+					serverList[i].start();
+				}
 					
+		}
+		
+		public static Paxos getInstance(int numServers, int numClients) {
+		      if(instance == null) {
+		         instance = new Paxos(numServers, numClients);
+		      }
+		      return instance;
 		}
 		
 		/**
@@ -102,6 +109,10 @@ public class Paxos {
 			  
 		}
 		
+		// 
+		public synchronized void redirectMessage(Message msg){
+				
+		} 
 		
 		
 		
