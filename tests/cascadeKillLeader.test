@@ -1,0 +1,14 @@
+start 5 3
+sendMessage 0 hello_0
+allClear
+timeBombLeader 0
+allClear
+sendMessage 1 hello_1
+allClear
+timeBombLeader 0
+allClear
+sendMessage 2 hello_2
+allClear
+printChatLog 0
+printChatLog 1
+printChatLog 2
