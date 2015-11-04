@@ -56,7 +56,7 @@ public class Server extends Node {
    */
   public HashMap<Integer, NodeRole> roles;
 
-  Replica replica;
+  public Replica replica;
   Acceptor acceptor;
   Leader leader;
   
@@ -159,9 +159,8 @@ public class Server extends Node {
       /* initiates acceptor */
     acceptor = new Acceptor(bind(index, Constant.ACCEPTOR), this);
 
-    if (isLeader()) {
-    	 
-      leader = new Leader(bind(index, Constant.LEADER), this, acceptors, replicas);
+    if (isLeader()) {	 
+    	  leader = new Leader(bind(index, Constant.LEADER), this, acceptors, replicas);
     } else {
       leader = null;
     }
@@ -186,9 +185,7 @@ public class Server extends Node {
     // while I am working  
     while (!shutdown) {
       Message msg = receive();
-      if(Constant.DEBUG && msg!=null){
-    	  System.out.println("I am server "+ pid +"  receive message " + msg.toString());
-  	  }
+      
       
       if (shutdown) {
         return;
@@ -210,9 +207,6 @@ public class Server extends Node {
     	  // update the active list of client
     	  if (msg instanceof RequestMessage){
     		  int source = Math.abs(msg.src);
-    		  if(Constant.DEBUG){
-    			  System.out.println("I am server " + index + "  receive from client "+ source);
-    		  }
     		  activeClientList.add(source);
     	  }
           relay(msg);
@@ -251,11 +245,6 @@ public class Server extends Node {
   public void relay(Message msg) {
 	  
     if (roles.containsKey(msg.dst)) {
-      
-      if(Constant.DEBUG){
-    	  System.out.println("I am server "+pid+" relay message to "+ msg.dst+ " "+msg.toString());
-      
-      }
       if(msg.dst!=-1)
     	  roles.get(msg.dst).deliver(msg);
     } 
@@ -281,8 +270,14 @@ public class Server extends Node {
       leaderID = 1;
     }
     if (isLeader()) {
-      leader = new Leader(bind(index, Constant.LEADER), this,
-          acceptors, replicas);
+      if(Constant.DEBUG){
+    	  System.out.println("running leader election " + leaderID + " is new leader");
+      }
+      
+      leader = new Leader(bind(index, Constant.LEADER), this, acceptors, replicas);
+       
+    	  
+		
       leader.start();
     } else {
       leader = null;
@@ -364,10 +359,11 @@ public class Server extends Node {
 	      //}
 	    } else {
 	      int serverId = msg.dst / Constant.INTERLEAVE;
+	      if(Constant.DEBUG){
+	    	  System.out.println("Deliver to server " + serverId + msg.toString());
+	      }
 	      if(serverId != pid){
-	    	  if(Constant.DEBUG){
-		    	  System.out.println("Deliver to server " + serverId + msg.toString());
-		      }
+	    	 
 	    	  Thread.sleep(delaySending(channel, serverId-1));
 	    	  nc.sendMsg(serverId -1 , msg.toString());
 	    	  //paxos.redirectMessage(serverId-1, msg);

@@ -29,7 +29,7 @@ public abstract class Message implements Serializable{
    */
   public String PvalueSet2Str(HashSet<Pvalue> p) {
 	  String result = "";
-	  if(p.isEmpty()){
+	  if(p == null || p.isEmpty()){
 		  return "nothing";
 	  }
 	  for(Pvalue tmp : p){

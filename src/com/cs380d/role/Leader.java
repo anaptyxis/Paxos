@@ -9,6 +9,7 @@ import message.AdoptedMessage;
 import message.Message;
 import message.PreemptedMessage;
 import message.ProposeMessage;
+import message.RequestMessage;
 
 import application.HeartBeatSender;
 import application.Server;
@@ -24,7 +25,7 @@ import value.Pvalue;
 public class Leader extends NodeRole {
   public BallotNum ballotNum;
   public boolean active;
-  public HashMap<Integer, Command> proposals;
+  public Map<Integer, Command> proposals;
   public int[] acceptors;
   public int[] replicas;
   public HeartBeatSender hbs;
@@ -36,6 +37,21 @@ public class Leader extends NodeRole {
     ballotNum = new BallotNum(0, pid);
     active = false;
     proposals = new HashMap<Integer, Command>();
+    
+    if( !server.replica.clientMessageList.isEmpty()){
+    	 for(int i = 0 ; i < server.replica.clientMessageList.size(); i++){
+    		 ProposeMessage m = server.replica.clientMessageList.get(i);
+    		 //System.out.println("resend request " + m + "  to server " + pid);
+    		 try {
+				server.send(pid, m);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	 }
+    }
+   
+    
     server.roles.put(pid, this);
     
   }
@@ -60,6 +76,7 @@ public class Leader extends NodeRole {
         if (!proposals.containsKey(propMsg.slotNum)) {
           int s = propMsg.slotNum;
           Command p = propMsg.prop;
+         // System.out.println("what I receive is " + msg);
           proposals.put(s, p);
           if (active) {
         	
@@ -71,6 +88,7 @@ public class Leader extends NodeRole {
         AdoptedMessage adptMsg = (AdoptedMessage) msg;
         update(adptMsg.accepted);
         for (int s : proposals.keySet()) {
+          //System.out.println("sending out commander for adopt message ");
           new Commander(server.nextId(), server, pid, acceptors, replicas, new Pvalue(ballotNum, s, proposals.get(s))).start();
         }
         active = true;

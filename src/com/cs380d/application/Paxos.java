@@ -21,6 +21,7 @@ public class Paxos {
 		public Config config;
 		public NetController ncController;
 		private static Paxos instance = null;
+		private boolean[] activeList;
 		public static ArrayList<ArrayList<Integer>> delayMatrix = null;
 		
 		
@@ -39,6 +40,10 @@ public class Paxos {
 		 * @throws IOException 
 		 */
 		private Paxos(int numServers, int numClients) throws IOException {
+			
+			    /*
+			     * Configured the delay matrix 
+			     */
 			    delayMatrix = new ArrayList<ArrayList<Integer>>();
 			    for(int i = 0 ; i < numClients+numServers ; i++){
 			    	ArrayList<Integer> rowArrayList = new ArrayList<Integer>();
@@ -52,7 +57,13 @@ public class Paxos {
 			    	}
 			    	delayMatrix.add(rowArrayList);
 			    }
+			    // Configured active server list
+			    activeList = new boolean[numServers];
+			    for(int i = 0 ; i < activeList.length; i++){
+			    	activeList[i] = true;
+			    }
 			    
+			    // config the channel
 				config = new Config(numClients+numServers,numClients+numServers+1);
 				ncController = new NetController(config);
 				serverList = new Server[numServers];

@@ -1,5 +1,8 @@
 package role;
 
+import java.util.Map;
+
+import value.Command;
 import value.Constant;
 import message.MessageFIFO;
 import message.Message;
@@ -15,9 +18,6 @@ public class NodeRole extends Thread{
 	  public NodeRole (int id, Server s) {
 	    pid = id;
 	    server = s;
-	    if(Constant.DEBUG){
-	    	  System.out.println("Initilize server for node role "+id+" " + server.index);
-	      }
 	    msgQueue = new MessageFIFO();
 	  }
 	  
@@ -29,9 +29,6 @@ public class NodeRole extends Thread{
 	  public void send (int dst, Message msg) {
 		    msg.dst = dst;
 		    //server send the message
-		    if (Constant.DEBUG){
-		    	System.out.println("I am sending to" + Integer.toString(dst)+ " " + msg);
-		    }
 		    try {
 				server.send(msg);
 			} catch (InterruptedException e) {
@@ -90,5 +87,25 @@ public class NodeRole extends Thread{
 	  }
 
 
-
+	  /**
+	   * convert dicision map to string
+	   * @param decision map
+	   */
+	   public String decMap2Str(Map<Integer, Command> dec){
+		   if( dec == null || dec.isEmpty()) return "nothing";
+		   String result = "";
+		   for (Map.Entry<Integer, Command> entry : dec.entrySet()) {
+			    Integer key = entry.getKey();
+			    Command value = entry.getValue();
+			    String tmpString = Integer.toString(key) + Constant.DECISIONDELIMITER+value.toString();
+			    result = result + tmpString + Constant.DECISIONLISTDELIMITER;
+			}
+		   //System.out.println("result is " + result);
+		   if(!result.equals("")){
+				  int length = result.length();
+				  return result.substring(0,length-1);
+			}else{
+				  return "nothing";
+			}
+	   }
 }

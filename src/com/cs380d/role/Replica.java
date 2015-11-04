@@ -1,5 +1,6 @@
 package role;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class Replica extends NodeRole {
   public int slotNum;
   public Map<Integer, Command> proposals;
   public Map<Integer, Command> decisions;
+  public ArrayList<ProposeMessage> clientMessageList = new ArrayList<ProposeMessage>();
 
   public Replica(int pid, Server svr, Map<Integer, Command> initial, int
       slotCount) {
@@ -53,7 +55,10 @@ public class Replica extends NodeRole {
     if (!decisions.containsValue(p)) {
       int s = getMaxSlotNum();
       proposals.put(s, p);
-      send(server.getLeader(), new ProposeMessage(pid, s, p));
+      ProposeMessage m = new ProposeMessage(pid, s, p);
+      if(Constant.DEBUG) System.out.println("what I propose is " + p + " send  to " + server.getLeader());
+      send(server.getLeader(), m);
+      clientMessageList.add(m);
     }else{
     	//System.out.println("Note : propose has already been decided");
     }
@@ -94,6 +99,8 @@ public class Replica extends NodeRole {
       // propose with lowest unused slot
       if (msg instanceof RequestMessage) {
         RequestMessage rqstMsg = (RequestMessage) msg;
+        
+        //System.out.print("what I receive is " + msg);
         propose(rqstMsg.prop);
       }
       // receive a decision message
@@ -138,6 +145,7 @@ public class Replica extends NodeRole {
 		  this.decisions = recRepMsg.decisions;
 		  return recRepMsg.leaderID;
 	  } else {
+		  if(Constant.DEBUG)
 		  System.err.println("Recovering Replica received non-recovery message.");
 		  return -1;
 	  }
