@@ -2,8 +2,6 @@ package role;
 
 
 import java.util.HashSet;
-import java.util.Set;
-
 import message.DecisionMessage;
 import message.Message;
 import message.Phase2aMessage;
@@ -13,7 +11,6 @@ import message.PreemptedMessage;
 import application.Server;
 
 import value.BallotNum;
-import value.Constant;
 import value.Pvalue;
 
 /**
@@ -53,11 +50,13 @@ public class Commander extends NodeRole {
       Message msg = receive();
      
       if (msg instanceof Phase2bMessage) {
+    	
         Phase2bMessage p2b = (Phase2bMessage) msg;
         if (b.compareTo(p2b.ballotNum) == 0) {
           if(waitingList.contains(p2b.src)) {
             waitingList.remove(p2b.src);
           }
+         // System.out.println("I am receive phase 2b message" + msg  + " and the size is  " + waitingList.size());
           if (waitingList.size() < (acceptors.length + 1) / 2) {
             for (int p : replicas) {
               Message decision = new DecisionMessage(pid, pv.slotNum, pv.prop);

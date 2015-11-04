@@ -29,7 +29,8 @@ public class Replica extends NodeRole {
     super(pid, svr);
     slotNum = slotCount;
     proposals = new HashMap<Integer, Command>();
-    decisions = initial;
+    if(initial == null) decisions = new HashMap<Integer,Command>();
+    else decisions = initial;
     server.roles.put(pid, this);
   }
 
@@ -117,7 +118,7 @@ public class Replica extends NodeRole {
     	  //System.out.print("what I receive is " + msg);
     	  RecoveryReplyMessage srm = new RecoveryReplyMessage(pid, slotNum,
     			  new HashMap<Integer, Command>(decisions), server.leaderID);
-    	  //System.out.println("helps "+msg.src+" to recover " + srm);
+    	 // System.out.println("helps "+msg.src+" to recover " + srm);
     	  send(msg.src, srm);
     	  
       }

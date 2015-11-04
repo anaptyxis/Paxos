@@ -141,6 +141,7 @@ public class Server extends Node {
 	      
 	      //System.out.println("I am receiveing recover message ");
 	      if (msg instanceof RecoveryReplyMessage) {
+	    	  //System.out.println("I am receiveing recover message " + msg);
 	        return (RecoveryReplyMessage) msg;
 	      }
 	    
@@ -339,7 +340,7 @@ public class Server extends Node {
 		   else if (messageCount > 0) {
 			   messageCount--;
 			   if(Constant.DEBUG)
-				   System.out.println("Shutdown timer: " + messageCount);
+				   System.out.println("Shutdown timer: " + messageCount + " message is " + msg);
 		   }
 		   lock.unlock();
 	   }

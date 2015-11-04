@@ -7,13 +7,13 @@ import java.util.Map;
 import value.Command;
 import value.Constant;
 import value.Pvalue;
-
+import java.io.Serializable;
 /**
  * @author Tian Zhang
  */
 
-public abstract class Message {
-
+public abstract class Message implements Serializable{
+  public static final long serialVersionUID = 6473128480951955693L;
   public int src;
   public int dst = -1;
 
@@ -70,6 +70,7 @@ public abstract class Message {
    * @param decision map
    */
    public String decMap2Str(Map<Integer, Command> dec){
+	   if( dec == null || dec.isEmpty()) return "nothing";
 	   String result = "";
 	   for (Map.Entry<Integer, Command> entry : dec.entrySet()) {
 		    Integer key = entry.getKey();
