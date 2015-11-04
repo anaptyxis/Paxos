@@ -92,8 +92,9 @@ public class Server extends Node {
   /**
 	 * recover the server
 	 * @param none
+ * @throws InterruptedException 
 	 */
-  public void recover () {
+  public void recover () throws InterruptedException {
 	  // recover as replica
 	  int newPid = bind(index, Constant.REPLICA);
 	  if (Constant.DEBUG) {
@@ -122,7 +123,7 @@ public class Server extends Node {
    *  recover inquiry function
    *  When server recover, it send to others ask for its 
    */
-  public RecoveryReplyMessage getReplicaReply (int src) {
+  public RecoveryReplyMessage getReplicaReply (int src) throws InterruptedException {
 	    // send to all replicas with the recover request
 	    // System.out.println("ask others for help");
 	  while(!shutdown){
@@ -322,9 +323,10 @@ public class Server extends Node {
    * Send message 
    * to support time bomb leader function from paxos
    * @param msg
+ * @throws InterruptedException 
    */
    @Override
-   public void send(Message msg) {
+   public void send(Message msg) throws InterruptedException {
 	   // count the number which is sent by leader
 	   // count down only for phase 1a message and phase 2a message
 	   if (msg instanceof Phase1aMessage || msg instanceof Phase2aMessage) {
@@ -353,7 +355,9 @@ public class Server extends Node {
 	     
 	      // only send to active client
 	      // if(activeClientList.contains(clientId)){
+	      	  Thread.sleep(delaySending(channel, clientId+numServers));
 	    	  nc.sendMsg(clientId+numServers, msg.toString());
+	          //paxos.redirectMessage(clientId+numServers, msg);
 	    	  if(Constant.DEBUG){
 	    		  System.out.println("Delivered to client: " + clientId);
 	    	  }
@@ -364,7 +368,9 @@ public class Server extends Node {
 	    	  if(Constant.DEBUG){
 		    	  System.out.println("Deliver to server " + serverId + msg.toString());
 		      }
+	    	  Thread.sleep(delaySending(channel, serverId-1));
 	    	  nc.sendMsg(serverId -1 , msg.toString());
+	    	  //paxos.redirectMessage(serverId-1, msg);
 	      }else{
 	    	  deliver(msg);
 	      }

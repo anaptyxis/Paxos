@@ -9,7 +9,7 @@ import value.Constant;
  */
 public class Master {
 
-  public static void main(String [] args) {
+  public static void main(String [] args) throws InterruptedException {
     Scanner scan = new Scanner(System.in);
     int numNodes = 0, numClients = 0;
     Paxos paxos = null;
@@ -58,7 +58,8 @@ public class Master {
                * of them
                */
         try {
-          Thread.sleep(Constant.TIMEOUTFORHEARTBEAT);
+          int sleep = Math.max(Constant.TIMEOUTFORHEARTBEAT, Constant.MAXVALUE);
+          Thread.sleep(sleep);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }

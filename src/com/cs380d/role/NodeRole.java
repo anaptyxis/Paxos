@@ -32,7 +32,12 @@ public class NodeRole extends Thread{
 		    if (Constant.DEBUG){
 		    	System.out.println("I am sending to" + Integer.toString(dst)+ " " + msg);
 		    }
-		    server.send(msg);
+		    try {
+				server.send(msg);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	  }
 	  
 	  /**

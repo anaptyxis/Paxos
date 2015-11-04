@@ -5,6 +5,8 @@ public class Constant {
 	    public static final int FIFOSIZE = 10000;
 	    // The interleave between 2 server
 	    public static final int INTERLEAVE = 10000;
+	    // delay max
+	    public static final int MAXVALUE = 500;
 	    // The role of server
 	    public static final int REPLICA = 0;
 	    public static final int ACCEPTOR = 1;

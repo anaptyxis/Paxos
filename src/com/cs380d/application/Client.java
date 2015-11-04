@@ -58,8 +58,9 @@ public class Client extends Node {
    * @param string text
    * Configured Command with id sequenceNumber
    * send out request to every replicas
+ * @throws InterruptedException 
    */
-  public void broadcast (String s) {
+  public void broadcast (String s) throws InterruptedException {
     Command prop = new Command(cid, sequenceNum, s);
     sequenceNum++;
     for (int id : replicas) {

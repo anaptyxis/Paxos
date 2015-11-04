@@ -36,6 +36,7 @@ public class Node extends Thread{
   int[] acceptors;
   int[] replicas;
   public int[] clients;
+  protected int channel ;
 
   /**
 	 * Default Constructor
@@ -62,10 +63,14 @@ public class Node extends Thread{
     }
     
     try {
-    	if(isClient)
-    		config = new Config(id+numServers,numServers+numClients);
-    	else
-    		config = new Config(id-1,numServers+numClients);
+    	if(isClient){
+    		config = new Config(id+numServers,numServers+numClients+1);
+    		channel = id+ numServers;
+    	}
+    	else{
+    		config = new Config(id-1,numServers+numClients+1);
+    		channel = id-1;
+    	}
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -81,20 +86,25 @@ public class Node extends Thread{
    * port 0 - numServer + numClient-1 
    * client 0 - numClient-1
    * server numClient - numServer + numClient - 1
+   * @throws InterruptedException 
    */
-  public void send(Message msg) {
+  public void send(Message msg) throws InterruptedException {
 	 
 	 if (msg instanceof ResponseMessage) {
 	      //only message to client 
 	      int clientId = Math.abs(msg.dst);
+	      Thread.sleep(delaySending(channel, clientId+numServers));
 	      this.nc.sendMsg(clientId+numServers, msg.toString());
+	      //paxos.redirectMessage(clientId+numServers, msg);
 	      if(Constant.DEBUG){
 	        System.out.println("Delivered to client: " + clientId);
 	      }
 	    } else {
-	      int serverId = msg.dst / Constant.INTERLEAVE;
-	      this.nc.sendMsg(serverId -1 , msg.toString());
 	      
+	      int serverId = msg.dst / Constant.INTERLEAVE;
+	      Thread.sleep(delaySending(channel, serverId+numServers));
+	      this.nc.sendMsg(serverId -1 , msg.toString());
+	      //paxos.redirectMessage(serverId-1, msg);
 	      if(Constant.DEBUG){
 	    	  System.out.println("Deliver to server " + serverId + " " + msg.toString());
 	      }
@@ -107,8 +117,9 @@ public class Node extends Thread{
   /**
    * Send message to paxos
    * @param dest, msg
+ * @throws InterruptedException 
    */
-  public void send(int dst, Message msg) {
+  public void send(int dst, Message msg) throws InterruptedException {
     msg.dst = dst;
     send(msg);
   }
@@ -141,6 +152,20 @@ public class Node extends Thread{
     Message result = msgQueue.dequeue();
     return result;
   }
+  
+  
+  
+  /*
+   * 
+   * 
+   */
+   public int delaySending(int src, int dest){
+	    int i = Math.min(src, dest);
+	    int j = Math.min(src, dest);
+	    int delay = Paxos.delayMatrix.get(i).get(j);
+	    return delay;
+   }
+  
   
   /**
    * get the id dynamically

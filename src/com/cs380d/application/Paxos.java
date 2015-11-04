@@ -21,6 +21,9 @@ public class Paxos {
 		public Config config;
 		public NetController ncController;
 		private static Paxos instance = null;
+		public static ArrayList<ArrayList<Integer>> delayMatrix = null;
+		
+		
 		/**
 		 * Default Constructor
 		 * 
@@ -33,9 +36,25 @@ public class Paxos {
 		/**
 		 * Config the paxos environment
 		 * @param numServers, number od client
+		 * @throws IOException 
 		 */
-		private Paxos(int numServers, int numClients) {
-			
+		private Paxos(int numServers, int numClients) throws IOException {
+			    delayMatrix = new ArrayList<ArrayList<Integer>>();
+			    for(int i = 0 ; i < numClients+numServers ; i++){
+			    	ArrayList<Integer> rowArrayList = new ArrayList<Integer>();
+			    	for(int j = 0 ; j < numClients+numServers; j++){
+			    		int randomNum =  (int)(Math.random()* Constant.MAXVALUE);
+			    		if(i<j){
+			    			rowArrayList.add(randomNum);
+			    		}else{
+			    			rowArrayList.add(0);
+			    		}
+			    	}
+			    	delayMatrix.add(rowArrayList);
+			    }
+			    
+				config = new Config(numClients+numServers,numClients+numServers+1);
+				ncController = new NetController(config);
 				serverList = new Server[numServers];
 				for (int i = 1; i <= numServers; i++) {
 					serverList[i - 1] = new Server(i, numServers, numClients, this, false);
@@ -55,7 +74,12 @@ public class Paxos {
 		
 		public static Paxos getInstance(int numServers, int numClients) {
 		      if(instance == null) {
-		         instance = new Paxos(numServers, numClients);
+		         try {
+					instance = new Paxos(numServers, numClients);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		      }
 		      return instance;
 		}
@@ -84,9 +108,10 @@ public class Paxos {
 		/**
 		 * restart the server
 		 * @param id of server
+		 * @throws InterruptedException 
 		 */
 		
-		public void reviveServer(int serverID){
+		public void reviveServer(int serverID) throws InterruptedException{
 			//serverList[serverID] = null;
 			serverList[serverID] = new Server(serverID + 1, serverList.length, clientList.length, this,true);
 			serverList[serverID].recover();
@@ -96,9 +121,10 @@ public class Paxos {
 		/**
 		 * a client broadcast the message
 		 * @param id of client
+		 * @throws InterruptedException 
 		 */
 		
-		public void clientBroadcast(int client, String Msg ){
+		public void clientBroadcast(int client, String Msg ) throws InterruptedException{
 			  try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -109,9 +135,10 @@ public class Paxos {
 			  
 		}
 		
-		// 
-		public synchronized void redirectMessage(Message msg){
-				
+		// redirect the message to its destination
+		
+		public synchronized void redirectMessage(int dest ,Message msg){
+				this.ncController.sendMsg(dest, msg.toString());
 		} 
 		
 		
