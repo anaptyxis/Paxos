@@ -13,9 +13,13 @@ import java.io.Serializable;
  */
 
 public abstract class Message implements Serializable{
-  public static final long serialVersionUID = 6473128480951955693L;
-  public int src;
-  public int dst = -1;
+  
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3337482118059427847L;
+    public int src;
+    public int dst = -1;
 
 
 
