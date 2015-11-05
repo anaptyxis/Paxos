@@ -326,7 +326,7 @@ public class Server extends Node {
 	   // count down only for phase 1a message and phase 2a message
 	   if (msg instanceof Phase1aMessage || msg instanceof Phase2aMessage) {
 		   lock.lock();
-		   // should shut down now
+			// should shut down now
 		   if (messageCount == 0) {
 			   if(Constant.DEBUG)
 				   System.out.println("Shutdown Now!");
@@ -335,7 +335,8 @@ public class Server extends Node {
 		   }
 		   // count down message
 		   else if (messageCount > 0) {
-			   messageCount--;
+			   if (msg.src/10 == msg.dst/10) //do not decrement for intraserver messages
+				   messageCount--;
 			   if(Constant.DEBUG)
 				   System.out.println("Shutdown timer: " + messageCount + " message is " + msg);
 		   }
