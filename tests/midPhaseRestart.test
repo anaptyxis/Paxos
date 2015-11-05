@@ -1,0 +1,10 @@
+start 3 2
+crashServer 2
+timeBombLeader 1
+sendMessage 0 haha
+restartServer 2
+allClear
+sendMessage 1 hehe
+allClear
+printChatLog 0
+printChatLog 1
