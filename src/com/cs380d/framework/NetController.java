@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Level;
+import value.Constant;
 
 /**
  * Public interface for managing network connections.
@@ -45,7 +46,8 @@ public class NetController {
 			throw new IllegalStateException("proc " + proc + " not null");
 		
 		outSockets[proc] = new OutgoingSock(new Socket(config.addresses[proc], config.ports[proc]));
-		config.logger.info(String.format("Server %d: Socket to %d established", 
+		if(Constant.DEBUG)		
+			config.logger.info(String.format("Server %d: Socket to %d established", 
 				config.procNum, proc));
 	}
 	
@@ -74,18 +76,22 @@ public class NetController {
 						outSockets[process].cleanShutdown();
 	                	outSockets[process] = null;
 					}
-					config.logger.info(String.format("Server %d: Msg to %d failed.",
-                        config.procNum, process));
-        		    config.logger.log(Level.FINE, String.format("Server %d: Socket to %d error",
-                        config.procNum, process), e);
+					if(Constant.DEBUG) {
+						config.logger.info(String.format("Server %d: Msg to %d failed.",
+								config.procNum, process));
+        		    	config.logger.log(Level.FINE, String.format("Server %d: Socket to %d error",
+        		    			config.procNum, process), e);
+					}
                     return false;
 				}
 				return true;
 			}
-			config.logger.info(String.format("Server %d: Msg to %d failed.", 
-				config.procNum, process));
-			config.logger.log(Level.FINE, String.format("Server %d: Socket to %d error", 
-				config.procNum, process), e);
+			if(Constant.DEBUG) {
+				config.logger.info(String.format("Server %d: Msg to %d failed.", 
+						config.procNum, process));
+				config.logger.log(Level.FINE, String.format("Server %d: Socket to %d error", 
+						config.procNum, process), e);
+			}
 			return false;
 		}
 		return true;
@@ -104,7 +110,8 @@ public class NetController {
 				try {
 					objs.addAll(curSock.getMsgs());
 				} catch (Exception e) {
-					config.logger.log(Level.INFO, 
+					if(Constant.DEBUG) 
+						config.logger.log(Level.INFO, 
 							"Server " + config.procNum + " received bad data on a socket", e);
 					curSock.cleanShutdown();
 					iter.remove();

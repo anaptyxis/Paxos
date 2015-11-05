@@ -12,6 +12,8 @@ import java.net.ServerSocket;
 import java.util.List;
 import java.util.logging.Level;
 
+import value.Constant;
+
 public class ListenServer extends Thread {
 
 	public volatile boolean killSig = false;
@@ -29,13 +31,15 @@ public class ListenServer extends Thread {
 		port = conf.ports[procNum];
 		try {
 			serverSock = new ServerSocket(port);
-			conf.logger.info(String.format(
+			if(Constant.DEBUG)
+				conf.logger.info(String.format(
 					"Server %d: Server connection established", procNum));
 		} catch (IOException e) {
 			String errStr = String.format(
 					"Server %d: [FATAL] Can't open server port %d", procNum,
 					port);
-			conf.logger.log(Level.SEVERE, errStr);
+			if(Constant.DEBUG)
+				conf.logger.log(Level.SEVERE, errStr);
 			throw new Error(errStr);
 		}
 	}
@@ -47,13 +51,15 @@ public class ListenServer extends Thread {
 						serverSock.accept());
 				socketList.add(incomingSock);
 				incomingSock.start();
-				conf.logger.fine(String.format(
+				if(Constant.DEBUG)
+					conf.logger.fine(String.format(
 						"Server %d: New incoming connection accepted from %s",
 						procNum, incomingSock.sock.getInetAddress()
 								.getHostName()));
 			} catch (IOException e) {
 				if (!killSig) {
-					conf.logger.log(Level.INFO, String.format(
+					if(Constant.DEBUG)
+						conf.logger.log(Level.INFO, String.format(
 							"Server %d: Incoming socket failed", procNum), e);
 				}
 			}
@@ -65,7 +71,8 @@ public class ListenServer extends Thread {
 		try {
 			serverSock.close();
 		} catch (IOException e) {
-			conf.logger.log(Level.INFO,String.format(
+			if(Constant.DEBUG)
+				conf.logger.log(Level.INFO,String.format(
 					"Server %d: Error closing server socket", procNum), e);
 		}
 	}
