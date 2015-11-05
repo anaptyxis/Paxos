@@ -124,9 +124,11 @@ public class Paxos {
 		
 		public void reviveServer(int serverID) throws InterruptedException{
 			//serverList[serverID] = null;
-			serverList[serverID] = new Server(serverID + 1, serverList.length, clientList.length, this,true);
-			serverList[serverID].recover();
-		    serverList[serverID].start();  
+			if (serverList[serverID].shutdown) {
+				serverList[serverID] = new Server(serverID + 1, serverList.length, clientList.length, this,true);
+				serverList[serverID].recover();
+			    serverList[serverID].start();
+			}
 		}
 		
 		/**
