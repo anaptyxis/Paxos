@@ -101,6 +101,10 @@ public class Paxos {
 		 */
 		
 		public String printLog(int clientID){
+			if(clientID >= numClients){
+				 System.err.println("Invalid client number");
+				 return;
+			}
 			return clientList[clientID].printChatLog();
 		}
 		
@@ -111,7 +115,10 @@ public class Paxos {
 		 */
 		
 		public void crashServer(int serverID){
-			 
+			  if(serverID >= numServers){
+				 System.err.println("Invalid server number");
+				 return;
+			  } 
 			  serverList[serverID].cleanShutDown();
 		}
 		
@@ -138,8 +145,14 @@ public class Paxos {
 		 */
 		
 		public void clientBroadcast(int client, String Msg ) throws InterruptedException{
-			  try {
-				Thread.sleep(100);
+			
+			if(client >= numClients){
+				 System.err.println("Invalid client number");
+				 return;
+			}
+
+			try {
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
