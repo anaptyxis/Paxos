@@ -1,13 +1,20 @@
-Complie the project
+################################################################################
+# README                                                                       #
+# CS 380D Distributed Computing I, Fall 2015                                   #
+# Project #2, PAXOS                                                            #
+# Tian Zhang, UT EID: tz3272, UTCS ID: tz3273                                  #
+# Bradley Beth, UT EID: bethbg, UTCS ID: bbeth                                 #
+################################################################################
 
-Run make paxos
+1. Compiling and executing the project
 
-Using the autograder:
+This project is implemented in Java 1.8. A Makefile is included to compile the project in the root directory. To execute the project code, simply issue "./COMMAND" at a command line prompt.
 
-Run "python tester.py" and check your output.
+2. Testing the project
 
-To add your own tests, create a .test file and a .sol file in the tests/ and solutions/ directories respectively.
-You can check what your output was in the answers/ directory.
+The project may be batch tested using the framework initially provided:
+
+Run "python tester.py". All .test testcases located in tests/ will be run sequentially and generate .ans files in the answers/ directory. These will be compared against the expected output located in .sol files located in solutions/.
 
 Running tests manually:
 
@@ -21,3 +28,18 @@ cat tests/[test_name].test | $(cat COMMAND) > temp_output && diff -q temp_output
 
 If your output matches the solution, NOTHING will be printed. Otherwise the lines that differ will be shown. 
 The output for the run of the test will also be stored in a file temp_output after running the second command.
+
+3. Project Assumptions
+
+This project is an implementation of Paxos for state machine replication. In the context of this project, this is realized as a simulation of a simple chat room. 
+
+The commands available for execution by the Master program are reflected in the assignment API and will not be repeated here. However, there are some implementation details worth noting:
+
+	• sendMessage— Messages are stored in a FIFO queue (as verified in Piazza post @112). Asynchronicity is simulated by creating a delay matrix upon initializing the run. The delay matrix stores delays between all clients and servers in a triangular matrix; each is delay is randomly generated in the range of 0–500ms.
+	• allClear– Our implementation of allClear depends on sleeping the Master thread for the length of time equal to the Heartbeat timeout or 500ms—whichever is greater.
+
+	• timeBombLeader– The current leader is allowed to send the specified number of Phase 1a or Phase 2a messages before crashing (cf., Piazza @96). Any other messages including heartbeats are not impacted by this limit. If for some reason the server crashes BEFORE the timeBomb and is restarted, the timeBomb is nullified.
+
+4. Project Implementation
+
+
