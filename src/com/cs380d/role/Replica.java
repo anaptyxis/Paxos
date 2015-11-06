@@ -56,7 +56,7 @@ public class Replica extends NodeRole {
       int s = getMaxSlotNum();
       proposals.put(s, p);
       ProposeMessage m = new ProposeMessage(pid, s, p);
-      if(Constant.DEBUG) System.out.println("what I propose is " + p + " send  to " + server.getLeader());
+      //System.out.println("what I propose is " + p + " send  to " + server.getLeader());
       send(server.getLeader(), m);
       clientMessageList.add(m);
     }else{
@@ -100,7 +100,7 @@ public class Replica extends NodeRole {
       if (msg instanceof RequestMessage) {
         RequestMessage rqstMsg = (RequestMessage) msg;
         
-        //System.out.print("what I receive is " + msg);
+        //System.out.println("what I receive is " + msg);
         propose(rqstMsg.prop);
       }
       // receive a decision message
