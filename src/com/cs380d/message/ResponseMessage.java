@@ -6,7 +6,7 @@ import value.Constant;
 
 /**
  * @author Tian Zhang
- * Decision Message for Commander
+ * Response Message from Client to Replica
  */
 
 public class ResponseMessage extends Message {

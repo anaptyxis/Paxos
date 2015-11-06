@@ -8,38 +8,187 @@
 
 1. Compiling and executing the project
 
-This project is implemented in Java 1.8. A Makefile is included to compile the project in the root directory. To execute the project code, simply issue "./COMMAND" at a command line prompt.
+    This project is implemented in Java 1.8. A Makefile is included to compile 
+    the project in the root directory. To execute the project code, simply issue
+    "./COMMAND" at a command line prompt.
 
 2. Testing the project
 
-The project may be batch tested using the framework initially provided:
+    The project may be batch tested using the framework initially provided——
 
-Run "python tester.py". All .test testcases located in tests/ will be run sequentially and generate .ans files in the answers/ directory. These will be compared against the expected output located in .sol files located in solutions/.
-
-Running tests manually:
-
-To run the sample tests, replace test_name with the name of the test and execute the following command:
-
-cat tests/[test_name].test | $(cat COMMAND)
-
-To automatically check the output:
-
-cat tests/[test_name].test | $(cat COMMAND) > temp_output && diff -q temp_output tests/[test_name].sol
-
-If your output matches the solution, NOTHING will be printed. Otherwise the lines that differ will be shown. 
-The output for the run of the test will also be stored in a file temp_output after running the second command.
+    Run "python tester.py". All .test testcases located in tests/ will be run 
+    sequentially and generate .ans files in the answers/ directory. These will 
+    be compared against the expected output contained in .sol files located in 
+    solutions/.
 
 3. Project Assumptions
 
-This project is an implementation of Paxos for state machine replication. In the context of this project, this is realized as a simulation of a simple chat room. 
+    This project is an implementation of Paxos for state machine replication. 
+    In the context of this project, this is realized as a simulation of a simple
+    chat room application. 
 
-The commands available for execution by the Master program are reflected in the assignment API and will not be repeated here. However, there are some implementation details worth noting:
+    The commands available for execution by the Master program are reflected in 
+    the assignment API and will not be repeated here. However, there are some 
+    implementation details worth noting:
 
-	• sendMessage— Messages are stored in a FIFO queue (as verified in Piazza post @112). Asynchronicity is simulated by creating a delay matrix upon initializing the run. The delay matrix stores delays between all clients and servers in a triangular matrix; each is delay is randomly generated in the range of 0–500ms.
-	• allClear– Our implementation of allClear depends on sleeping the Master thread for the length of time equal to the Heartbeat timeout or 500ms—whichever is greater.
+        • sendMessage—— Messages are stored in a FIFO queue (as sanctioned in 
+        Piazza post @112). Asynchronicity is simulated by creating a delay 
+        matrix upon initializing the run. The delay matrix stores pairwise 
+        delays between all clients and servers in a upper triangular matrix; 
+        each is delay is randomly generated in the range of 0–500ms.
+    
+        • allClear—— Our implementation of allClear depends on sleeping the 
+        Master thread for the length of time equal to the Heartbeat timeout or 
+        500ms—whichever is greater.
 
-	• timeBombLeader– The current leader is allowed to send the specified number of Phase 1a or Phase 2a messages before crashing (cf., Piazza @96). Any other messages including heartbeats are not impacted by this limit. If for some reason the server crashes BEFORE the timeBomb and is restarted, the timeBomb is nullified.
+        • timeBombLeader—— The current leader is allowed to send the specified 
+        number of Phase 1a or Phase 2a messages before crashing (cf., Piazza 
+        @96). Any other messages including heartbeats are not impacted by this 
+        limit. Additionally, messages sent within the same server (including to 
+        other role-threads) are not counted. If for some reason the server 
+        crashes BEFORE the timeBomb and is restarted, the timeBomb is nullified.
 
 4. Project Implementation
 
+    The classes Master and Paxos provide the high level framework for the chat 
+    room application.
+    
+        • Master provides the API to interact with the system as specified in 
+        the project handout.
+        
+        • An instance of Paxos is created through the Master class. It provides 
+        the interface between the Master controller class and each of the 
+        individual server and client nodes as well as the creation and 
+        maintenance of inter-node socket communication through a NetController/
+        Config configuration instance.    
+
+    Nodes are defined by the "start x y" command issued to the Master 
+    controller, in the quantity of (x + y), with x Servers and y Clients. 
+    Clients and Servers are both subclasses of the Node class, which contains 
+    common state and functionality across both Servers and Clients, such as 
+    socket information, process IDs, Message queues, etc.
+        └── Node
+            ├── Client
+            └── Server
+
+    In this implementation of Paxos, Server Nodes serve a variety of roles. 
+    Threads are spawned to fill each of these roles on a per-server basis. Each 
+    of the "roles" is spawned as a thread instance of the corresponding NodeRole
+    subclass as listed below. The NodeRole class serves to encapsulate the basic
+    functionality served among all of the various roles, including message 
+    send/receive. Note that roles are named as they are in *Paxos Made 
+    Moderately Complex*.
+        └── NodeRole
+            ├── Acceptor
+            ├── Commander
+            ├── Leader
+            ├── Replica
+            └── Scout
+                     
+    Message communication is handled through specific subclasses of the abstract
+    Message class (as listed below). Messages are instantiated according to 
+    their role in the Paxos algorithm and passed to a buffering queue, which is 
+    processed to send messages from client->server, server->server, and server->
+    client. Upon receipt, the receiving entity casts the Message received to its
+    appropriate type using reflection, and handles it as such. Messages are 
+    converted to and from PValues and Strings during the message passing 
+    process.
+        └── Message
+            ├── AdoptedMessage
+            ├── DecisionMessage
+            ├── HeartBeatMessage
+            ├── Phase1aMessage
+            ├── Phase1bMessage
+            ├── Phase2aMessage
+            ├── Phase2bMessage
+            ├── PreemptedMessage
+            ├── ProposeMessage
+            ├── RecoveryReplyMessage
+            ├── RecoveryRequestMessage
+            ├── RequestMessage
+            └── ResponseMessage
+         
+    In addition to the message types as described in *Paxos Made Moderately 
+    Complex* (Adopted, Decision, p1a, p1b, p2a, p2b, Preempted, Propose, 
+    Request, and Response), the following message types specific to our 
+    implementation are detailed below:
+    
+        • HeartBeatMessage—— This is a very simple message that serves the 
+        purpose of determining if the current leader has crashed. A 
+        HeartBeatMessage is sent by the current leader every 
+        Constant.HEARTBEATMESSAGEGAP milliseconds (defaults to 100). Every 
+        Server has a HeartBeatMessageHandler that monitors for these heartbeats.
+        When Constant.TIMEOUTFORHEARTBEAT milliseconds (defaults to 500) passes
+        for some Server's HeartBeatMessageHandler without receiving a heartbeat,
+        a leader election is triggered, and a new Leader will begin sending 
+        heartbeats. 
+        
+        • RecoveryRequestMessage—— This special message is sent by a Server when
+        a recovery is triggered. Its purpose is simply to signal its attempt at
+        recovery to all other potentially live Servers, in order to obtain the
+        current state of the system.
+        
+        • RecoveryReplyMessage—— This special message is sent only in reply to
+        the receipt of a RecoveryRequestMessage. Any server receiving a recovery
+        request sends its current slot number, leader ID, and decision list to
+        the recovering server. The recovering server acts upon receiving the 
+        first response from a live Server. A new Replica is instantiated with
+        this information. As it is a new Replica, its proposal list is empty.
+        
+             
+Appendix A. Java Package Hierarchy
+
+Our Java implementation of Paxos is organized across the following package 
+structure. 
+
+Notes:
+    • com.cs380d.framework contains a slightly modified version of the Java 
+    socket communication code provided with Project 1.
+    • Verbose DEBUG mode may be set with the Constant.DEBUG value.
+    
+    CODEBASE
+    └── com
+        └── cs380d
+            ├── application
+            │   ├── Client
+            │   ├── HeartBeatMessageHandler
+            │   ├── HeartBeatSender
+            │   ├── Master
+            │   ├── Node
+            │   ├── Paxos
+            │   └── Server
+            ├── framework
+            │   ├── Config
+            │   ├── IncomingSock
+            │   ├── ListenServer
+            │   ├── NetController
+            │   └── OutgoingSock
+            ├── message
+            │   ├── AdoptedMessage
+            │   ├── DecisionMessage
+            │   ├── HeartBeatMessage
+            │   ├── Message
+            │   ├── MessageFIFO
+            │   ├── Phase1aMessage
+            │   ├── Phase1bMessage
+            │   ├── Phase2aMessage
+            │   ├── Phase2bMessage
+            │   ├── PreemptedMessage
+            │   ├── ProposeMessage
+            │   ├── RecoveryReplyMessage
+            │   ├── RecoveryRequestMessage
+            │   ├── RequestMessage
+            │   └── ResponseMessage
+            ├── role
+            │   ├── Acceptor
+            │   ├── Commander
+            │   ├── Leader
+            │   ├── NodeRole
+            │   ├── Replica
+            │   └── Scout
+            └── value
+                ├── BallotNum
+                ├── Command
+                ├── Constant
+                └── Pvalue
 
