@@ -6,7 +6,8 @@ public class Constant {
 	    // The interleave between 2 server
 	    public static final int INTERLEAVE = 10000;
 	    // delay max
-	    public static final int MAXVALUE = 500;
+	    public static final int MAXVALUE = 100;
+	    public static final int CLIENTGAP = 50;
 	    // The role of server
 	    public static final int REPLICA = 0;
 	    public static final int ACCEPTOR = 1;

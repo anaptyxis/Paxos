@@ -152,7 +152,7 @@ public class Paxos {
 			}
 
 			try {
-				Thread.sleep(50);
+				Thread.sleep(Constant.CLIENTGAP);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
