@@ -1,0 +1,39 @@
+digraph Paxos {
+	splines=true;
+	overlap=scalexy;
+	nodesep=1;
+	size="10,7.5"
+	rotate=90
+	node [ width = "1.5" ]
+	edge [ fontcolor=blue ]
+	a [ label="Acceptor" ]
+	l [ label="Leader" ]
+	c [ label="Commander" ]
+	s [ label="Scout" ]
+	r [ label="Replica" ]
+	client [ label="Client" ]
+	subgraph cluster_1 {
+		color=gray
+		c -> or1 [ arrowhead=none ]
+		or1 -> l [ label=" preempted (ballot') " ]
+		s -> or2 [ arrowhead=none ]
+		or2 -> l [ label=" adopted (ballot, pvalues{}) " ]
+		or2 -> l [ label=" preempted (ballot') " ]
+	}
+	
+	r -> client [ label=" response " ]
+	client -> r [ label=" request (cmd) " ]
+	or1 [ penwidth=0.5, label="", width=0.01, height=0.01, shape="box" ]
+        or2 [ penwidth=0.5, label="", width=0.01, height=0.01, shape="box" ]
+	
+	r -> l [ label=" propose (slot, cmd) " ]
+	or1 -> r [ label=" decision (slot, cmd) " ]
+
+	s -> a [ label=" p1a (ballot) " ]
+	a -> s [ label=" p1b (ballot, accepted) " ]
+	c -> a [ label=" p2a (ballot, slot, cmd) " ]
+	a -> c [ label=" p2b (ballot') " ]
+
+
+
+}
